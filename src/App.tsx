@@ -16,6 +16,7 @@ const Nri = lazy(() => import('./pages/Nri'))
 const Navratri = lazy(() => import('./pages/Navratri'))
 const Contact = lazy(() => import('./pages/Contact'))
 const NotFound = lazy(() => import('./pages/NotFound'))
+const SizeGuide = lazy(() => import('./pages/SizeGuide'))
 
 export const routes: RouteObject[] = [
   {
@@ -24,6 +25,7 @@ export const routes: RouteObject[] = [
       { path: '/', element: <Home /> },
       { path: '/shop', element: <Shop /> },
       { path: '/shop/:category', element: <Shop /> },
+      { path: '/search', element: <Shop /> },
       { path: '/catalogue', element: <Shop /> },
       { path: '/catalogue/:slug', element: <Product /> },
       { path: '/bag', element: <Bag /> },
@@ -37,6 +39,7 @@ export const routes: RouteObject[] = [
       { path: '/nri-brides/:country', element: <Nri /> },
       { path: '/navratri-outfits-ahmedabad', element: <Navratri /> },
       { path: '/contact', element: <Contact /> },
+      { path: '/size-guide', element: <SizeGuide /> },
       { path: '*', element: <NotFound /> },
     ],
   },

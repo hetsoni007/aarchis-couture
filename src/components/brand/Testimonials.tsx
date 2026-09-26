@@ -1,5 +1,5 @@
 import { content } from '../../lib/catalog'
-import { ZariRule } from './Motifs'
+import './blocks.css'
 
 interface Quote { name: string; place: string; quote: string }
 
@@ -11,16 +11,14 @@ export function Testimonials() {
   const items = (content.testimonials.items as Quote[]).filter((q) => q.quote && q.name && !/TODO/i.test(q.quote))
   if (!items.length) return null
   return (
-    <section className="section testimonials" aria-labelledby="tst-title">
-      <div className="wrap">
-        <p className="eyebrow">In their words</p>
-        <h2 id="tst-title" className="h1">From the brides</h2>
-        <ZariRule />
+    <section className="section tst" aria-labelledby="tst-title">
+      <div className="container">
+        <header className="sec-head is-center"><div><p className="t-label">In their words</p><h2 id="tst-title" className="t-h2">From our brides</h2></div></header>
         <ul role="list" className="tst-list">
           {items.map((q, i) => (
-            <li key={i}>
-              <blockquote className="italic-voice tst-q">“{q.quote}”</blockquote>
-              <p className="tst-who">{q.name}{q.place && <span className="muted"> · {q.place}</span>}</p>
+            <li key={i} className="tst-item">
+              <blockquote className="tst-q">“{q.quote}”</blockquote>
+              <p className="tst-who t-small">{q.name}{q.place && <span className="t-muted"> · {q.place}</span>}</p>
             </li>
           ))}
         </ul>

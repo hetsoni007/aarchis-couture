@@ -17,7 +17,7 @@ copyFileSync(join(dist, 'index.html'), join(dist, '200.html'))
 const routes = [
   '/', '/shop', ...content.categories.map((c) => `/shop/${c.slug}`),
   ...products.map((p) => `/catalogue/${p.slug}`),
-  '/how-it-works', '/about', '/nri-brides', '/nri-brides/usa', '/nri-brides/uk', '/navratri-outfits-ahmedabad', '/contact',
+  '/how-it-works', '/about', '/nri-brides', '/nri-brides/usa', '/nri-brides/uk', '/navratri-outfits-ahmedabad', '/contact', '/size-guide', '/search',
   '/bag', '/checkout', '/account', '/wishlist', '/__404',
 ]
 

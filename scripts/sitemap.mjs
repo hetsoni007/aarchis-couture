@@ -9,7 +9,7 @@ const routes = [
   ...content.categories.map((c) => [`/shop/${c.slug}/`, '0.8']),
   ...products.map((p) => [`/catalogue/${p.slug}/`, p.isNew ? '0.8' : '0.7']),
   ['/how-it-works/', '0.6'], ['/about/', '0.6'], ['/nri-brides/', '0.7'], ['/nri-brides/usa/', '0.6'], ['/nri-brides/uk/', '0.6'],
-  ['/navratri-outfits-ahmedabad/', '0.7'], ['/contact/', '0.6'],
+  ['/navratri-outfits-ahmedabad/', '0.7'], ['/contact/', '0.6'], ['/size-guide/', '0.5'],
 ]
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

@@ -1,0 +1,56 @@
+@layer components {
+/* section header centred variant */
+.sec-head.is-center { justify-content: center; text-align: center; }
+.sec-head.is-center > div { justify-items: center; }
+
+/* ═══════════════ PAGE HEADER ═══════════════ */
+.phead { padding-block: clamp(20px, 3vw, 32px) clamp(40px, 6vw, 80px); }
+.phead-in { display: grid; gap: 32px; align-items: center; }
+.phead.has-img .phead-in { gap: 28px; }
+@media (min-width: 64rem) { .phead.has-img .phead-in { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 64px; } }
+.phead-copy { display: grid; gap: 14px; justify-items: start; align-content: center; }
+.phead-copy .crumbs { margin-bottom: clamp(16px, 3vw, 40px); }
+.phead-label { color: var(--gold); }
+.phead-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.phead-media { max-width: 560px; width: 100%; justify-self: end; }
+@media (max-width: 63.99rem) { .phead-media { justify-self: stretch; max-width: none; } .phead-media .img { aspect-ratio: 16 / 10 !important; } }
+
+/* ═══════════════ STEPS ═══════════════ */
+.steps { display: grid; gap: 1px; background: var(--line); border-block: 1px solid var(--line); counter-reset: s; }
+@media (min-width: 37.5rem) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 64rem) { .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.step { display: grid; gap: 8px; align-content: start; padding: 28px 24px 32px 0; background: var(--white); }
+.bg-ivory .step { background: var(--ivory); }
+@media (min-width: 37.5rem) { .step { padding: 32px 28px; } }
+.step-n { font-family: var(--font-display); font-size: 2.25rem; line-height: 1; color: var(--gold); }
+.step-t { font-size: 1rem; font-weight: 600; }
+
+/* ═══════════════ FAQ ═══════════════ */
+.faq-grid { display: grid; gap: 28px; }
+@media (min-width: 64rem) { .faq-grid { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr); gap: 80px; } }
+.faq-head { display: grid; gap: 12px; align-content: start; }
+@media (min-width: 64rem) { .faq-head { position: sticky; top: calc(var(--header-h) + 32px); } }
+
+/* ═══════════════ CTA BAND ═══════════════ */
+.cta { background: var(--ink); color: var(--white); padding-block: clamp(64px, 8vw, 120px); text-align: center; --muted: #b9b2a8; }
+.cta :focus-visible { outline-color: var(--white); }
+.cta-in { display: grid; justify-items: center; gap: 16px; }
+.cta .t-label { color: var(--gold-soft); }
+.cta .t-lead { color: #e6e0d6; }
+.cta-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 12px; }
+
+/* ═══════════════ IMAGE TILE ═══════════════ */
+.itile { position: relative; display: block; overflow: hidden; color: var(--white); isolation: isolate; }
+.itile .img img { transition: transform 1.2s var(--ease); }
+.itile:hover .img img { transform: scale(1.04); }
+.itile::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgb(0 0 0 / 0.55)); pointer-events: none; }
+.itile-copy { position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; display: grid; gap: 6px; padding: clamp(18px, 3vw, 36px); }
+.itile-t { font-family: var(--font-display); font-size: var(--fs-h2); line-height: 1.05; }
+.itile-cta { justify-self: start; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding-bottom: 3px; border-bottom: 1px solid currentColor; margin-top: 6px; }
+
+/* ═══════════════ TESTIMONIALS ═══════════════ */
+.tst-list { display: grid; gap: 24px; }
+@media (min-width: 48rem) { .tst-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.tst-item { display: grid; gap: 14px; padding: 28px; background: var(--ivory); }
+.tst-q { font-family: var(--font-display); font-style: italic; font-size: 1.25rem; line-height: 1.45; }
+}

@@ -2,7 +2,7 @@ import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Img } from '../ui/Img'
 import { Icon } from '../ui/Icon'
-import { Loader } from '../brand/Motifs'
+import { Spinner } from '../ui/Kit'
 import { imgSource } from '../../lib/img'
 import { useDevice } from '../../lib/device'
 import { useFocusTrap } from '../../lib/a11y'
@@ -11,7 +11,7 @@ import { paintFabric, specOf } from '../../lib/fabric'
 import { cx } from '../../lib/format'
 import type { Product } from '../../lib/catalog'
 import type { ViewerApi } from '../three/GarmentViewer'
-import './gallery.css'
+import './product.css'
 
 const GarmentViewer = lazy(() => import('../three/GarmentViewer'))
 
@@ -19,11 +19,14 @@ export interface Frame { folder: 'p' | 'e'; file: string; alt: string; caption?:
 
 export function framesOf(p: Product): Frame[] {
   const main: Frame = { folder: 'p', file: p.image.file, alt: p.image.alt, fit: p.image.fit, focus: p.image.focus }
-  const story = (p.story?.slides ?? []).map((s) => ({ folder: 'e' as const, file: s.file, alt: s.alt, caption: s.caption }))
+  const story = (p.story?.slides ?? []).map((s) => ({ folder: 'e' as const, file: s.file, alt: s.alt, caption: s.caption, focus: '50% 35%' }))
   return [main, ...story]
 }
 
-/* ═══════════════ Lightbox with wheel / pinch / double-tap zoom and drag-pan ═══════════════ */
+// 88vw on phones: at DPR ~1.75 that selects the 640w file instead of 800w — visually identical, a third lighter
+export const GALLERY_SIZES = '(min-width: 64rem) 46vw, 88vw'
+
+/* ═══════════════ Lightbox: wheel / pinch / double-tap zoom and drag-pan ═══════════════ */
 function Lightbox({ frames, index, onClose, onIndex }: { frames: Frame[]; index: number; onClose: () => void; onIndex: (i: number) => void }) {
   const ref = useRef<HTMLDivElement>(null)
   const stage = useRef<HTMLDivElement>(null)
@@ -34,6 +37,7 @@ function Lightbox({ frames, index, onClose, onIndex }: { frames: Frame[]; index:
   useFocusTrap(ref, true, onClose)
   useEffect(() => { lockScroll(true); return () => lockScroll(false) }, [])
   useEffect(() => setZ({ s: 1, x: 0, y: 0 }), [index])
+
   const f = frames[index]
   const src = imgSource(f.folder, f.file)
   const big = `/img/${f.folder}/${f.file}-${src.meta.widths[src.meta.widths.length - 1]}.webp`
@@ -43,22 +47,21 @@ function Lightbox({ frames, index, onClose, onIndex }: { frames: Frame[]; index:
     const mx = (el.clientWidth * (s - 1)) / 2, my = (el.clientHeight * (s - 1)) / 2
     return { s, x: Math.max(-mx, Math.min(mx, x)), y: Math.max(-my, Math.min(my, y)) }
   }
-  const zoomTo = (s: number) => setZ((c) => clamp(Math.max(1, Math.min(3, s)), s === 1 ? 0 : c.x, s === 1 ? 0 : c.y))
+  const zoomTo = (s: number) => setZ((c) => clamp(Math.max(1, Math.min(3, s)), s <= 1 ? 0 : c.x, s <= 1 ? 0 : c.y))
   const go = (d: number) => onIndex((index + d + frames.length) % frames.length)
 
   return createPortal(
-    <div ref={ref} className="lightbox" role="dialog" aria-modal="true" aria-label={`Photograph ${index + 1} of ${frames.length}`}
+    <div ref={ref} className="lb" role="dialog" aria-modal="true" aria-label={`Photograph ${index + 1} of ${frames.length}`}
       onKeyDown={(e) => { if (e.key === 'ArrowRight') go(1); if (e.key === 'ArrowLeft') go(-1); if (e.key === '+' || e.key === '=') zoomTo(z.s + 0.5); if (e.key === '-') zoomTo(z.s - 0.5) }}>
       <div className="lb-top">
-        <span className="num lb-count">{index + 1} / {frames.length}</span>
+        <span className="t-num lb-count">{index + 1} / {frames.length}</span>
         <div className="lb-tools">
           <button onClick={() => zoomTo(z.s - 0.5)} disabled={z.s <= 1} aria-label="Zoom out"><Icon name="zoomOut" /></button>
-          <span className="num lb-zoom" aria-live="polite">{Math.round(z.s * 100)}%</span>
           <button onClick={() => zoomTo(z.s + 0.5)} disabled={z.s >= 3} aria-label="Zoom in"><Icon name="zoomIn" /></button>
           <button onClick={onClose} aria-label="Close" data-autofocus><Icon name="close" /></button>
         </div>
       </div>
-      <div ref={stage} className={cx('lb-stage', z.s > 1 && 'is-zoomed')} data-cursor={z.s > 1 ? 'Drag' : 'Zoom'}
+      <div ref={stage} className={cx('lb-stage', z.s > 1 && 'is-zoomed')}
         onWheel={(e) => zoomTo(z.s * (e.deltaY < 0 ? 1.15 : 0.87))}
         onPointerDown={(e) => {
           (e.target as Element).setPointerCapture?.(e.pointerId)
@@ -90,37 +93,39 @@ function Lightbox({ frames, index, onClose, onIndex }: { frames: Frame[]; index:
       </div>
       {frames.length > 1 && (
         <>
-          <button className="lb-nav is-prev" onClick={() => go(-1)} aria-label="Previous photograph"><Icon name="arrowL" /></button>
-          <button className="lb-nav is-next" onClick={() => go(1)} aria-label="Next photograph"><Icon name="arrow" /></button>
+          <button className="lb-nav is-prev" onClick={() => go(-1)} aria-label="Previous photograph"><Icon name="chevronL" size={22} /></button>
+          <button className="lb-nav is-next" onClick={() => go(1)} aria-label="Next photograph"><Icon name="chevronR" size={22} /></button>
         </>
       )}
-      {f.caption && <p className="lb-cap italic-voice">{f.caption}</p>}
-      <p className="lb-hint small">{z.s > 1 ? 'Drag to look around · double-tap to reset' : 'Pinch, scroll or double-tap to look closer'}</p>
+      <div className="lb-foot">
+        {f.caption && <p className="lb-cap">{f.caption}</p>}
+        <p className="lb-hint">{z.s > 1 ? 'Drag to look around · double-tap to reset' : 'Scroll, pinch or double-tap to zoom'}</p>
+      </div>
     </div>,
     document.body,
   )
 }
 
-/* ═══════════════ Fabric study — the 2D textile, used before/instead of WebGL ═══════════════ */
+/* ═══════════════ Fabric study — the 2D textile, shown before / instead of WebGL ═══════════════ */
 export function FabricStudy({ p, className }: { p: Product; className?: string }) {
-  const url = useMemo(() => {
-    try { return paintFabric(specOf(p), 512).colour.toDataURL('image/webp', 0.85) } catch { return '' }
+  const [url, setUrl] = useState('')
+  useEffect(() => {
+    try { setUrl(paintFabric(specOf(p), 512).colour.toDataURL('image/webp', 0.85)) } catch { setUrl('') }
   }, [p])
   return <span className={cx('fabric-study', className)} style={{ backgroundImage: url ? `url(${url})` : undefined }} aria-hidden="true" />
 }
 
-/* ═══════════════ 3D panel with real controls ═══════════════ */
+/* ═══════════════ 3D study with real controls ═══════════════ */
 function ViewerPanel({ p }: { p: Product }) {
   const device = useDevice()
   const api = useRef<ViewerApi | null>(null)
   const [auto, setAuto] = useState(!device.reducedMotion)
   const [ready, setReady] = useState(false)
-  // the study is opened on request, so reduced-motion visitors still get it (still, no turntable); only no-WebGL falls back
   if (!device.webgl) {
     return (
       <div className="viewer is-fallback">
         <FabricStudy p={p} className="viewer-fabric" />
-        <p className="viewer-note small">A 3D study needs WebGL, which isn’t available on this device — here is the woven fabric study instead: this piece’s colours and craft, laid flat.</p>
+        <p className="viewer-note">A 3D study needs WebGL, which isn’t available on this device. Here is the fabric study instead: this piece’s colours and craft, laid flat.</p>
       </div>
     )
   }
@@ -129,102 +134,106 @@ function ViewerPanel({ p }: { p: Product }) {
     const map: Record<string, () => void> = { ArrowLeft: () => a.rotate(-1), ArrowRight: () => a.rotate(1), '+': () => a.zoom(1), '=': () => a.zoom(1), '-': () => a.zoom(-1), d: () => a.detail(), r: () => a.reset(), ' ': () => setAuto((v) => !v) }
     if (map[e.key]) { e.preventDefault(); map[e.key]() }
   }
-  const silhouetteWord = { lehenga: 'lehenga', saree: 'saree drape', dupatta: 'dupatta on a stand', suit: 'draped suit fabric', anarkali: 'anarkali', gown: 'gown', menswear: 'men’s ensemble', maternity: 'maternity ensemble', kurta: 'kurta set' }[p.derived.silhouette]
+  const word = { lehenga: 'lehenga', saree: 'saree drape', dupatta: 'dupatta on a stand', suit: 'draped suit fabric', anarkali: 'anarkali', gown: 'gown', menswear: 'men’s ensemble', maternity: 'maternity ensemble', kurta: 'kurta set' }[p.derived.silhouette]
   return (
     <div className="viewer">
       <div className="viewer-stage" tabIndex={0} onKeyDown={key} role="group" aria-roledescription="3D viewer"
-        aria-label={`Interpretive 3D study of the ${p.name}: a ${silhouetteWord} in ${p.derived.families.join(', ').toLowerCase()}. Arrow keys turn it, plus and minus zoom, D shows the border up close, R resets, space pauses.`}
-        data-cursor="Turn" data-lenis-prevent>
-        {!ready && <div className="viewer-poster"><FabricStudy p={p} /><Loader label="Draping the study…" /></div>}
+        aria-label={`Interpretive 3D study of the ${p.name}: a ${word} in ${p.derived.families.join(', ').toLowerCase()}. Arrow keys turn it, plus and minus zoom, D shows the border up close, R resets, space pauses.`}>
+        {!ready && <div className="viewer-poster"><FabricStudy p={p} /><Spinner label="Loading the 3D study" /></div>}
         <Suspense fallback={null}>
           <GarmentViewer ref={api} p={p} device={device} auto={auto} onReady={() => setTimeout(() => setReady(true), 250)} />
         </Suspense>
       </div>
       <div className="viewer-bar" role="toolbar" aria-label="3D study controls">
-        <button onClick={() => api.current?.rotate(-1)} aria-label="Turn left"><Icon name="rotateL" size={20} /></button>
-        <button onClick={() => api.current?.rotate(1)} aria-label="Turn right"><Icon name="rotateR" size={20} /></button>
-        <span className="viewer-sep" aria-hidden="true" />
-        <button onClick={() => api.current?.zoom(1)} aria-label="Zoom in"><Icon name="zoomIn" size={20} /></button>
-        <button onClick={() => api.current?.zoom(-1)} aria-label="Zoom out"><Icon name="zoomOut" size={20} /></button>
-        <button onClick={() => api.current?.detail()} className="viewer-detail" aria-label="Close-up of the border and hand-work"><Icon name="detail" size={20} /><span>Detail</span></button>
-        <span className="viewer-sep" aria-hidden="true" />
-        <button onClick={() => setAuto((v) => !v)} aria-pressed={!auto} aria-label={auto ? 'Pause turntable' : 'Resume turntable'}><Icon name={auto ? 'pause' : 'play'} size={20} /></button>
-        <button onClick={() => api.current?.reset()} aria-label="Reset view"><Icon name="reset" size={20} /></button>
+        <button onClick={() => api.current?.rotate(-1)} aria-label="Turn left"><Icon name="rotateL" size={18} /></button>
+        <button onClick={() => api.current?.rotate(1)} aria-label="Turn right"><Icon name="rotateR" size={18} /></button>
+        <button onClick={() => api.current?.zoom(1)} aria-label="Zoom in"><Icon name="zoomIn" size={18} /></button>
+        <button onClick={() => api.current?.zoom(-1)} aria-label="Zoom out"><Icon name="zoomOut" size={18} /></button>
+        <button onClick={() => api.current?.detail()} aria-label="Close-up of the border and hand-work"><Icon name="detail" size={18} /></button>
+        <button onClick={() => setAuto((v) => !v)} aria-pressed={!auto} aria-label={auto ? 'Pause turntable' : 'Resume turntable'}><Icon name={auto ? 'pause' : 'play'} size={18} /></button>
+        <button onClick={() => api.current?.reset()} aria-label="Reset view"><Icon name="reset" size={18} /></button>
       </div>
-      <p className="viewer-note small">Interpretive study — silhouette, colour and craft drawn from this piece. The photographs are the true reference.</p>
+      <p className="viewer-note">An interpretive study of silhouette, colour and craft, drawn from this piece. The photographs are the true reference.</p>
     </div>
   )
 }
 
-/* ═══════════════ Gallery ═══════════════ */
+/* ═══════════════ The gallery: thumbnails + stage on desktop, swipe rail on mobile ═══════════════ */
 export function Gallery({ p }: { p: Product }) {
-  const frames = framesOf(p)
-  const [mode, setMode] = useState<'photo' | '3d'>('photo')
-  const [active, setActive] = useState(0)
-  const [lb, setLb] = useState<number | null>(null)
+  const frames = useMemo(() => framesOf(p), [p])
+  const total = frames.length + 1 // + the 3D study
   const rail = useRef<HTMLDivElement>(null)
+  const [i, setI] = useState(0)
+  const [lb, setLb] = useState<number | null>(null)
+  const [study, setStudy] = useState(false)
+  const device = useDevice()
 
-  // keep dots in sync with swipe position on the mobile rail
-  useEffect(() => {
-    const r = rail.current
-    if (!r) return
-    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.i)) }), { root: r, threshold: 0.6 })
-    r.querySelectorAll('[data-i]').forEach((el) => io.observe(el))
-    return () => io.disconnect()
-  }, [mode, p.slug])
-  useEffect(() => { setActive(0); setMode('photo') }, [p.slug])
+  useEffect(() => { setI(0); setStudy(false); rail.current?.scrollTo({ left: 0 }) }, [p.slug])
 
-  const goTo = (i: number) => {
-    setActive(i)
-    const el = rail.current?.querySelector<HTMLElement>(`[data-i="${i}"]`)
-    if (el && rail.current) rail.current.scrollTo({ left: el.offsetLeft - rail.current.offsetLeft, behavior: 'smooth' })
+  const go = (n: number) => {
+    const el = rail.current
+    if (!el) return
+    const k = Math.max(0, Math.min(total - 1, n))
+    el.scrollTo({ left: k * el.clientWidth, behavior: device.reducedMotion ? 'auto' : 'smooth' })
+    setI(k)
+  }
+  const onScroll = () => {
+    const el = rail.current
+    if (el) setI(Math.round(el.scrollLeft / el.clientWidth))
+  }
+  const zoom = (e: React.MouseEvent<HTMLElement>) => {
+    const r = e.currentTarget.getBoundingClientRect()
+    e.currentTarget.style.setProperty('--zx', `${((e.clientX - r.left) / r.width) * 100}%`)
+    e.currentTarget.style.setProperty('--zy', `${((e.clientY - r.top) / r.height) * 100}%`)
   }
 
   return (
-    <div className="gallery" data-fly-source>
-      <div className="gallery-tabs" role="tablist" aria-label="View">
-        <button role="tab" aria-selected={mode === 'photo'} className={cx(mode === 'photo' && 'is-on')} onClick={() => setMode('photo')}>
-          <Icon name="image" size={18} /> Photographs <span className="num">{frames.length}</span>
-        </button>
-        <button role="tab" aria-selected={mode === '3d'} className={cx(mode === '3d' && 'is-on')} onClick={() => setMode('3d')} data-cursor="3D">
-          <Icon name="cube" size={18} /> 3D study
-        </button>
-      </div>
+    <div className="gal">
+      <ul role="list" className="gal-thumbs" aria-label="Choose a view">
+        {frames.map((f, k) => (
+          <li key={f.file}>
+            <button className={cx('gal-thumb', i === k && 'is-on')} onClick={() => go(k)} aria-label={`View photograph ${k + 1}`} aria-current={i === k || undefined}>
+              <Img folder={f.folder} name={f.file} alt="" sizes="80px" ratio={3 / 4} fit={f.fit} focus={f.focus} />
+            </button>
+          </li>
+        ))}
+        <li>
+          <button className={cx('gal-thumb is-3d', i === frames.length && 'is-on')} onClick={() => go(frames.length)} aria-label="View the 3D study">
+            <Icon name="cube" size={22} /><span>3D</span>
+          </button>
+        </li>
+      </ul>
 
-      {mode === 'photo' ? (
-        <div className="gallery-body" role="tabpanel">
-          {frames.length > 1 && (
-            <ul role="list" className="gallery-thumbs hidden lg:grid">
-              {frames.map((f, i) => (
-                <li key={f.file + i}>
-                  <button className={cx('gthumb', i === active && 'is-on')} onClick={() => goTo(i)} aria-label={`Show photograph ${i + 1}`} aria-current={i === active || undefined}>
-                    <Img folder={f.folder} name={f.file} alt="" sizes="80px" ratio={4 / 5} fit={f.fit} focus={f.focus} />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-          <div ref={rail} className="gallery-rail rail" tabIndex={-1}>
-            {frames.map((f, i) => (
-              <figure key={f.file + i} className="gframe" data-i={i}>
-                <button className="gframe-btn" onClick={() => setLb(i)} aria-label={`Open photograph ${i + 1} larger`} data-cursor="Zoom">
-                  <Img folder={f.folder} name={f.file} alt={f.alt} sizes="(min-width: 64rem) 46vw, 100vw" ratio={4 / 5} fit={f.fit ?? 'cover'} focus={f.focus ?? '50% 30%'} priority={i === 0} className={i === 0 ? 'gframe-main' : undefined} />
-                  <span className="gframe-zoom" aria-hidden="true"><Icon name="expand" size={18} /></span>
-                </button>
-                {f.caption && <figcaption className="gframe-cap">{f.caption}</figcaption>}
-              </figure>
-            ))}
-          </div>
-          {frames.length > 1 && (
-            <div className="gallery-dots lg:hidden" aria-hidden="true">
-              {frames.map((_, i) => <i key={i} className={cx(i === active && 'is-on')} />)}
-              <span className="num">{active + 1}/{frames.length}</span>
-            </div>
-          )}
+      <div className="gal-stage">
+        <div ref={rail} className="gal-rail rail" onScroll={onScroll} aria-roledescription="carousel" aria-label={`${p.name} photographs`}>
+          {frames.map((f, k) => (
+            <figure key={f.file} className="gal-slide" aria-roledescription="slide" aria-label={`${k + 1} of ${total}`}>
+              <button className="gal-zoom" onClick={() => setLb(k)} onMouseMove={device.finePointer ? zoom : undefined} aria-label={`Open photograph ${k + 1} full screen`}>
+                <Img folder={f.folder} name={f.file} alt={f.alt} sizes={GALLERY_SIZES} ratio={3 / 4} fit={f.fit} focus={f.focus} priority={k === 0} />
+              </button>
+            </figure>
+          ))}
+          <figure className="gal-slide is-3d" aria-roledescription="slide" aria-label={`${total} of ${total}: 3D study`}>
+            {study ? <ViewerPanel p={p} /> : (
+              <div className="gal-3d-poster">
+                <FabricStudy p={p} />
+                <div className="gal-3d-card">
+                  <Icon name="cube" size={28} />
+                  <p className="t-h3">The 3D study</p>
+                  <p className="t-small t-muted">Turn an interpretive 3D model of this {p.derived.silhouette === 'saree' ? 'drape' : 'piece'}, drawn from its colours and craft.</p>
+                  <button className="btn btn-primary btn-md" onClick={() => setStudy(true)}><span className="btn-label">Open the 3D study</span></button>
+                </div>
+              </div>
+            )}
+          </figure>
         </div>
-      ) : (
-        <div role="tabpanel" className="gallery-body is-3d"><ViewerPanel p={p} /></div>
-      )}
+        <button className="gal-nav is-prev" onClick={() => go(i - 1)} disabled={i === 0} aria-label="Previous view"><Icon name="chevronL" size={20} /></button>
+        <button className="gal-nav is-next" onClick={() => go(i + 1)} disabled={i === total - 1} aria-label="Next view"><Icon name="chevronR" size={20} /></button>
+        <div className="gal-dots" aria-hidden="true">
+          {Array.from({ length: total }).map((_, k) => <i key={k} className={cx(k === i && 'is-on')} />)}
+        </div>
+        {i < frames.length && <span className="gal-hint" aria-hidden="true"><Icon name="expand" size={14} /> {device.finePointer ? 'Hover to zoom · click to enlarge' : 'Tap to enlarge'}</span>}
+      </div>
 
       {lb !== null && <Lightbox frames={frames} index={lb} onClose={() => setLb(null)} onIndex={setLb} />}
     </div>

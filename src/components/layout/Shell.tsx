@@ -1,77 +1,76 @@
 import { Suspense, useEffect, useRef } from 'react'
-import { Outlet, useLocation, useNavigationType } from 'react-router-dom'
-import { Nav } from './Nav'
-import { MobileMenu } from './MobileMenu'
-import { MiniBag } from './MiniBag'
+import { Link, Outlet, useLocation, useNavigationType } from 'react-router-dom'
+import { AnnouncementBar, Header } from './Header'
+import { MobileNav } from './MobileNav'
+import { SearchOverlay } from './SearchOverlay'
+import { CartDrawer } from './CartDrawer'
 import { Footer } from './Footer'
-import { Cursor, WeftCurtain, Concierge } from './Interactions'
-import { Toaster } from '../ui/Kit'
-import { BrandDefs } from '../brand/Monogram'
-import { PageLoader } from '../brand/Motifs'
-import { scrollToTop, getLenis, routeSettled } from '../../lib/scroll'
-import { detectDevice } from '../../lib/device'
+import { Concierge } from './Concierge'
+import { QuickView } from '../product/Rails'
+import { Logo } from '../brand/Logo'
+import { Icon } from '../ui/Icon'
+import { PageLoader, Toaster } from '../ui/Kit'
+import { scrollToTop } from '../../lib/scroll'
 import { useUi } from '../../store/ui'
 import { rehydrateStores } from '../../store/rehydrate'
 
-/** Remembers scroll per history entry; new pages start at the top. */
+/** New pages start at the top; back/forward returns to where you were. */
 function useScrollMemory() {
   const loc = useLocation()
   const type = useNavigationType()
   const positions = useRef(new Map<string, number>())
   useEffect(() => {
-    const key = loc.key
-    const save = () => positions.current.set(key, window.scrollY)
+    const save = () => positions.current.set(loc.key, window.scrollY)
     window.addEventListener('scroll', save, { passive: true })
     return () => window.removeEventListener('scroll', save)
   }, [loc.key])
   useEffect(() => {
     if (loc.hash) {
       const el = document.getElementById(decodeURIComponent(loc.hash.slice(1)))
-      if (el) { setTimeout(() => (getLenis() ? getLenis()!.scrollTo(el, { offset: -90 }) : el.scrollIntoView()), 60); return }
+      if (el) { setTimeout(() => el.scrollIntoView(), 60); return }
     }
-    if (type === 'POP') {
-      const y = positions.current.get(loc.key) ?? 0
-      requestAnimationFrame(() => (getLenis() ? getLenis()!.scrollTo(y, { immediate: true, force: true }) : window.scrollTo(0, y)))
-    } else scrollToTop(true)
-    // pages change height: re-measure every ScrollTrigger after the new route paints
-    const t = setTimeout(routeSettled, 120)
-    return () => clearTimeout(t)
+    if (type === 'POP') requestAnimationFrame(() => window.scrollTo(0, positions.current.get(loc.key) ?? 0))
+    else scrollToTop(true)
   }, [loc.pathname, loc.key, loc.hash, type])
+}
+
+function CheckoutHeader() {
+  return (
+    <header className="co-hdr">
+      <div className="container co-hdr-in">
+        <Link to="/bag" className="co-hdr-back" aria-label="Back to bag"><Icon name="arrowL" size={16} /> <span className="hidden sm:inline" aria-hidden="true">Back to bag</span></Link>
+        <Link to="/" className="co-hdr-logo"><Logo compact /></Link>
+        <span className="co-hdr-secure"><Icon name="shield" size={16} /> <span className="hidden sm:inline">Secure reservation</span></span>
+      </div>
+    </header>
+  )
 }
 
 export function Shell() {
   const { pathname } = useLocation()
   const setBag = useUi((s) => s.setBag)
   const setHydrated = useUi((s) => s.setHydrated)
+  const focused = pathname.startsWith('/checkout')
   useEffect(() => { rehydrateStores().then(setHydrated) }, [setHydrated])
-  useEffect(() => {
-    // inertia scroll is a desktop nicety: load the motion stack after first paint, never on touch
-    const d = detectDevice()
-    if (!d.finePointer || d.reducedMotion) return
-    const start = () => import('../../lib/motion').then((m) => m.startSmoothScroll())
-    if (document.readyState === 'complete') setTimeout(start, 300)
-    else window.addEventListener('load', () => setTimeout(start, 300), { once: true })
-  }, [])
   useEffect(() => { setBag(false) }, [pathname, setBag])
   useScrollMemory()
 
   return (
     <>
-      <BrandDefs />
       <a href="#main" className="skip-link">Skip to content</a>
-      <Nav />
+      {focused ? <CheckoutHeader /> : <><AnnouncementBar /><Header /></>}
       <main id="main" className="main" tabIndex={-1}>
         <Suspense fallback={<PageLoader />}>
           <Outlet />
         </Suspense>
       </main>
-      <Footer />
-      <MobileMenu />
-      <MiniBag />
-      <Concierge />
+      {!focused && <Footer />}
+      <MobileNav />
+      <SearchOverlay />
+      <CartDrawer />
+      <QuickView />
+      {!focused && <Concierge />}
       <Toaster />
-      <WeftCurtain />
-      <Cursor />
     </>
   )
 }

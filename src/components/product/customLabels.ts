@@ -34,5 +34,3 @@ export function defaultCustom(p: Product): Customisation {
   }
 }
 
-/** Items whose fit still needs a decision at checkout */
-export const needsMeasuring = (c: Customisation) => c.fit === 'video' || c.fit === 'profile' || c.fit === 'tailored'

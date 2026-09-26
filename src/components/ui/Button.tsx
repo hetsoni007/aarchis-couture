@@ -4,7 +4,9 @@ import { Icon, type IconName } from './Icon'
 import { cx } from '../../lib/format'
 import './ui.css'
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'icon' | 'night'
+/** primary = solid ink · secondary = ink outline · light = solid white (for dark or photo backgrounds)
+ *  outline-light = white outline · ghost = underlined text · icon = 44px square */
+type Variant = 'primary' | 'secondary' | 'light' | 'outline-light' | 'ghost' | 'icon'
 type Size = 'sm' | 'md' | 'lg'
 
 interface Common {
@@ -14,10 +16,9 @@ interface Common {
   iconRight?: IconName
   busy?: boolean
   block?: boolean
-  cursor?: string
   className?: string
   children?: ReactNode
-  label?: string // required for icon-only
+  label?: string // accessible name for icon-only buttons
 }
 type AsButton = Common & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & { to?: undefined; href?: undefined }
 type AsLink = Common & { to: string; href?: undefined; onClick?: () => void; disabled?: boolean; state?: unknown }
@@ -25,18 +26,17 @@ type AsAnchor = Common & { href: string; to?: undefined; onClick?: () => void; d
 export type ButtonProps = AsButton | AsLink | AsAnchor
 
 export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(function Button(props, ref) {
-  const { variant = 'primary', size = 'md', icon, iconRight, busy, block, cursor, className, children, label, ...rest } = props
+  const { variant = 'primary', size = 'md', icon, iconRight, busy, block, className, children, label, ...rest } = props
   const cls = cx('btn', `btn-${variant}`, `btn-${size}`, block && 'btn-block', busy && 'is-busy', className)
   const inner = (
     <>
-      {icon && <Icon name={icon} size={size === 'sm' ? 18 : 20} className="btn-ic" />}
-      {variant !== 'icon' && <span className="btn-label">{children}</span>}
-      {variant === 'icon' && <span className="sr-only">{label}</span>}
-      {iconRight && <Icon name={iconRight} size={18} className="btn-ic btn-ic-r" />}
-      {busy && <span className="btn-busy" aria-hidden="true"><i /></span>}
+      {icon && <Icon name={icon} size={size === 'sm' ? 16 : 18} className="btn-ic" />}
+      {variant !== 'icon' ? <span className="btn-label">{children}</span> : <span className="sr-only">{label}</span>}
+      {iconRight && <Icon name={iconRight} size={16} className="btn-ic btn-ic-r" />}
+      {busy && <span className="btn-busy" aria-hidden="true" />}
     </>
   )
-  const common = { className: cls, 'data-cursor': cursor, 'aria-busy': busy || undefined, title: variant === 'icon' ? label : undefined }
+  const common = { className: cls, 'aria-busy': busy || undefined, title: variant === 'icon' ? label : undefined }
 
   if ('to' in rest && rest.to !== undefined) {
     const { to, onClick, disabled, state } = rest as AsLink
@@ -58,7 +58,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
   }
   const { type = 'button', disabled, ...btn } = rest as AsButton
   return (
-    <button ref={ref as React.Ref<HTMLButtonElement>} type={type} disabled={disabled || busy} aria-disabled={disabled || undefined} {...btn} {...common}>
+    <button ref={ref as React.Ref<HTMLButtonElement>} type={type} disabled={disabled || busy} {...btn} {...common}>
       {inner}
     </button>
   )

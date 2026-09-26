@@ -1,34 +1,48 @@
 @layer components {
 .mguide { display: grid; gap: 28px; }
 @media (min-width: 48rem) { .mguide { grid-template-columns: minmax(180px, 0.8fr) minmax(0, 1.2fr); align-items: start; } }
-.mguide-fig { position: sticky; top: 0; display: grid; gap: 14px; justify-items: center; padding: 18px; background: var(--khadi-2); }
-@media (max-width: 47.99rem) { .mguide-fig { position: relative; grid-template-columns: 110px 1fr; align-items: center; justify-items: start; } }
+.mguide-fig { position: sticky; top: 0; display: grid; gap: 14px; justify-items: center; padding: 20px; background: var(--ivory); }
+@media (max-width: 47.99rem) { .mguide-fig { position: relative; grid-template-columns: 104px 1fr; align-items: center; justify-items: start; padding: 14px; } }
 .mfig { width: 100%; max-width: 200px; height: auto; }
-@media (max-width: 47.99rem) { .mfig { max-width: 110px; } }
-.mfig-body { fill: var(--khadi); stroke: var(--kajal); stroke-width: 1.2; }
-.mfig-arms { fill: none; stroke: var(--kajal); stroke-width: 1.2; stroke-linecap: round; opacity: 0.6; }
-.mfig-head { fill: none; stroke: var(--kajal); stroke-width: 1; opacity: 0.35; }
-.mfig-mark { opacity: 0; transition: opacity var(--t-ui); }
-.mfig-mark.is-on { opacity: 1; animation: mark-draw 900ms var(--ease-out); }
-@keyframes mark-draw { from { opacity: 0; transform: scale(0.96); transform-origin: center; } }
-.mguide-how { font-size: 0.92rem; line-height: 1.5; max-width: 34ch; min-height: 5.5em; }
-.mguide-how .eyebrow { margin-bottom: 4px; color: var(--zari-deep); }
+@media (max-width: 47.99rem) { .mfig { max-width: 104px; } }
+.mfig-body { fill: var(--white); stroke: var(--ink-2); stroke-width: 1.1; }
+.mfig-arms { fill: none; stroke: var(--ink-2); stroke-width: 1.1; stroke-linecap: round; opacity: 0.55; }
+.mfig-head { fill: none; stroke: var(--ink-2); stroke-width: 1; opacity: 0.35; }
+.mfig-mark { opacity: 0; transition: opacity var(--t); }
+.mfig-mark.is-on { opacity: 1; animation: mark-in 700ms var(--ease); }
+@keyframes mark-in { from { opacity: 0; } }
+.mguide-how { font-size: var(--fs-small); line-height: 1.55; max-width: 34ch; min-height: 5.5em; color: var(--ink-2); }
+.mguide-how .t-label { margin-bottom: 4px; color: var(--accent); }
 .mguide-form { display: grid; gap: 18px; }
-.mguide-top { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 16px; }
-.unit-toggle { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 999px; padding: 3px; }
-.unit-toggle button { min-width: 44px; min-height: 38px; border-radius: 999px; font-size: 0.82rem; letter-spacing: 0.08em; }
-.unit-toggle button.is-on { background: var(--kajal); color: var(--khadi); }
-.mguide-progress { margin-top: -4px; }
-.mguide-fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; }
-.mfield { display: grid; gap: 4px; padding: 10px 12px; border: 1px solid var(--line); cursor: text; transition: border-color var(--t-ui), background var(--t-ui); }
-.mfield.is-active { border-color: var(--zari); background: rgb(184 149 90 / 0.07); }
-.mfield.has-error { border-color: var(--sindoor); }
-.mfield-label { font-size: 0.74rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); }
-.mfield-label abbr { text-decoration: none; color: var(--sindoor); margin-left: 3px; }
+.mguide-top { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 12px; }
+.unit-toggle { display: inline-flex; border: 1px solid var(--line-2); height: 46px; }
+.unit-toggle button { min-width: 48px; font-size: var(--fs-small); font-weight: 500; }
+.unit-toggle button.is-on { background: var(--ink); color: var(--white); }
+.mguide-progress { margin-top: -6px; }
+.mguide-fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
+.mfield { display: grid; gap: 2px; padding: 10px 12px; border: 1px solid var(--line-2); cursor: text; transition: border-color var(--t), background var(--t); }
+.mfield.is-active { border-color: var(--ink); }
+.mfield.has-error { border-color: var(--danger); }
+.mfield-label { font-size: var(--fs-label); font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.mfield-label abbr { text-decoration: none; color: var(--accent); margin-left: 3px; }
 .mfield-in { display: flex; align-items: baseline; gap: 6px; }
-.mfield-in input { width: 100%; min-height: 40px; border: 0; background: transparent; font-size: 1.35rem; font-family: var(--font-display); font-variant-numeric: tabular-nums; }
+.mfield-in input { width: 100%; min-height: 36px; border: 0; background: transparent; font-size: 1.125rem; font-variant-numeric: tabular-nums; }
 .mfield-in input:focus-visible { outline: none; }
-.mfield-unit { font-size: 0.8rem; color: var(--ink-soft); }
-.mfield-err { font-size: 0.78rem; color: var(--sindoor); line-height: 1.4; }
+.mfield-unit { font-size: var(--fs-small); color: var(--muted); }
+.mfield-err { font-size: 0.75rem; color: var(--danger); line-height: 1.4; }
 .mguide.is-compact .mguide-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* "How to measure" reference list (size guide) */
+.howto { display: grid; gap: 24px; }
+@media (min-width: 48rem) { .howto { grid-template-columns: 220px 1fr; gap: 40px; align-items: start; } }
+.howto-fig { background: var(--ivory); padding: 20px; display: grid; justify-items: center; }
+@media (min-width: 48rem) { .howto-fig { position: sticky; top: calc(var(--header-h) + 24px); } }
+.howto-fig .mfig { max-width: 170px; }
+.howto-list { display: grid; border-top: 1px solid var(--line); }
+.howto-item { display: grid; grid-template-columns: 28px 1fr; gap: 4px 12px; padding: 14px 8px 14px 0; border-bottom: 1px solid var(--line); text-align: left; width: 100%; transition: background var(--t); }
+.howto-item:hover, .howto-item.is-on { background: linear-gradient(90deg, var(--ivory), transparent); }
+.howto-n { font-size: var(--fs-small); color: var(--muted); font-variant-numeric: tabular-nums; padding: 2px 0 0 6px; }
+.howto-t { font-weight: 600; font-size: 0.9375rem; }
+.howto-t abbr { text-decoration: none; color: var(--accent); margin-left: 2px; }
+.howto-d { grid-column: 2; color: var(--ink-2); font-size: var(--fs-small); line-height: 1.6; }
 }

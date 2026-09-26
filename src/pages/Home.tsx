@@ -1,226 +1,71 @@
-import { Suspense, lazy, useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Seo, ORG_LD, faqLd } from '../lib/seo'
-import { content, categories, categoryUrl, getProduct, products, storyProducts, productUrl, inCategory } from '../lib/catalog'
-import { useDevice, useIdleReady } from '../lib/device'
+import { SITE_URL } from '../lib/config'
+import { categories, categoryUrl, content, getProduct, productUrl, products, storyProducts } from '../lib/catalog'
+import { COVER, OCCASION_COVER, occasionsByImportance } from '../lib/nav'
 import { useReveals } from '../lib/reveal'
 import { askStylist } from '../lib/whatsapp'
+import { ProductCard } from '../components/product/ProductCard'
+import { ProductRail, RailArrows, RecentlyViewed, useRail } from '../components/product/Rails'
+import { FaqSection, ImageTile, Steps } from '../components/brand/Blocks'
+import { Testimonials } from '../components/brand/Testimonials'
 import { Button } from '../components/ui/Button'
 import { Img } from '../components/ui/Img'
-import { Accordion, Price } from '../components/ui/Kit'
 import { Icon } from '../components/ui/Icon'
-import { ProductCard } from '../components/product/ProductCard'
-import { ZariRule, BandhaniField } from '../components/brand/Motifs'
-import { HeroPoster } from '../components/brand/HeroPoster'
-import { Testimonials } from '../components/brand/Testimonials'
-import { SITE_URL } from '../lib/config'
-import './content.css'
 import './home.css'
 
-const LoomHero = lazy(() => import('../components/three/LoomHero'))
-
-/** campaign covers — the frames the live home page leads each story with (Scarlet Royal's carries baked-in
- *  campaign text, so its clean product portrait stands in) */
-const STORY_COVER: Record<string, string> = {
-  'blush-pastel-bridal-lehenga': 'blush-courtyard',
-  'contemporary-pastel-bride': 'pastel-palace', 'ivory-elegance-saree': 'elegance-portrait',
-  'scarlet-grace-anarkali': 'grace-jharokha', 'sunset-bandhani-ombre-dupatta': 'sunset-look',
-}
-const CAT_COVER: Record<string, string> = {
-  bridal: 'blush-pastel-bridal-lehenga', saree: 'ivory-elegance-saree', dupatta: 'gharchola-heritage-dupatta',
-  dressmaterial: 'noir-vine-embroidered-silk-suit', ethnic: 'sangeet-special-anarkali', mens: 'coral-turquoise-men-s-ensemble',
-  babyshower: 'motherhood-baby-shower-ensemble',
+const h = content.home
+const BRIDAL_PICKS = ['scarlet-royal-bridal-lehenga', 'contemporary-pastel-bride', 'scarlet-sonnet-lehenga', 'blush-pastel-bridal-lehenga']
+/** The on-figure frame that leads each campaign card. */
+const slideAlt = (file: string) => storyProducts.flatMap((p) => p.story!.slides).find((s) => s.file === file)?.alt ?? ''
+/** The on-figure frame that leads each campaign card (never one with baked-in headline text). */
+const STORY_COVER: Record<string, { folder: 'e' | 's'; file: string }> = {
+  'blush-pastel-bridal-lehenga': { folder: 'e', file: 'blush-look' }, 'scarlet-royal-bridal-lehenga': { folder: 's', file: 'story-lehenga' },
+  'contemporary-pastel-bride': { folder: 'e', file: 'pastel-look' }, 'ivory-elegance-saree': { folder: 'e', file: 'elegance-portrait' },
+  'sunset-bandhani-ombre-dupatta': { folder: 'e', file: 'sunset-look' }, 'scarlet-grace-anarkali': { folder: 'e', file: 'grace-courtyard' },
 }
 
 function Hero() {
-  const device = useDevice()
-  const section = useRef<HTMLElement>(null)
-  const progress = useRef(0)
-  const [ready, setReady] = useState(false)
-  const idle = useIdleReady()
-  const draws3D = device.tier !== 'none'
-  const rig = draws3D && device.finePointer && device.tier !== 'low' && !device.reducedMotion
-  const h = content.home.hero
-
-  useEffect(() => {
-    if (!rig) return
-    const el = section.current!
-    let ctx: { revert(): void } | undefined
-    let dead = false
-    import('../lib/motion').then(({ gsap }) => {
-      if (dead) return
-      ctx = gsap.context(() => {
-      // desktop: pin the loom; scroll drapes the cloth and hands over to the second line
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: el, start: 'top top', end: '+=110%', pin: true, scrub: 0.6, anticipatePin: 1,
-          onUpdate: (s) => { progress.current = s.progress },
-        },
-      })
-      tl.to('.hero-copy', { yPercent: -14, opacity: 0, ease: 'power2.in', duration: 0.3 }, 0.02)
-        .to('.hero-cue', { opacity: 0, duration: 0.15 }, 0)
-        .fromTo('.hero-second', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.3 }, 0.5)
-        .to('.hero-second', { opacity: 0, y: -30, duration: 0.2 }, 0.9)
-      }, el)
-    })
-    return () => { dead = true; ctx?.revert() }
-  }, [rig])
-
   return (
-    <section ref={section} className="hero night" aria-labelledby="hero-title" data-nav-night>
-      <div className="hero-stage">
-        <HeroPoster className={ready ? 'is-hidden' : ''} />
-        {draws3D && idle && (
-          <Suspense fallback={null}>
-            <LoomHero device={device} progress={progress} eventSource={section} onReady={() => setReady(true)} />
-          </Suspense>
-        )}
-        <div className="hero-vignette" aria-hidden="true" />
+    <section className="hero" aria-labelledby="hero-title">
+      <div className="hero-media" aria-hidden="true">
+        <Img folder="e" name="pastel-palace" alt="" sizes="34vw" ratio={9 / 16} className="hero-side" focus="50% 30%" />
+        <Img folder="e" name="blush-courtyard" alt="" sizes="(min-width: 48rem) 34vw, 100vw" ratio={9 / 16} className="hero-main" focus="50% 30%" priority />
+        <Img folder="e" name="grace-jharokha" alt="" sizes="34vw" ratio={9 / 16} className="hero-side" focus="50% 30%" />
       </div>
-      <div className="hero-copy wrap">
-        <p className="eyebrow hero-fade">{h.eyebrow}</p>
-        <h1 id="hero-title" className="display hero-title">
-          <span className="hero-line"><span>Where Tradition</span></span>
-          <span className="hero-line"><span><em className="v">Meets</em> Trend</span></span>
-        </h1>
-        <p className="lead hero-lead hero-fade">{h.lead}</p>
-        <div className="hero-ctas hero-fade">
-          <Button to="/shop" size="lg" iconRight="arrow" cursor="Enter">Enter the collections</Button>
-          <Button href={askStylist()} variant="ghost" icon="whatsapp" className="hero-ghost">Ask a stylist</Button>
-        </div>
-      </div>
-      <div className="hero-second wrap" aria-hidden={!rig}>
-        <p className="italic-voice">Every piece is made to measure <em>and designed around you.</em></p>
-      </div>
-      <div className="hero-cue hero-fade" aria-hidden="true">
-        <span className="hero-cue-line" />
-        <span>{rig ? 'Scroll — the cloth drapes' : 'Scroll'}</span>
-      </div>
-    </section>
-  )
-}
-
-function Marquee() {
-  const items = content.home.marquee
-  const row = [...items, ...items]
-  return (
-    <div className="marquee">
-      <p className="sr-only">{items.join(' · ')}</p>
-      <div className="marquee-track" aria-hidden="true">
-        {[0, 1].map((k) => (
-          <div className="marquee-set" key={k}>
-            {row.map((t, i) => (<span key={i} className="marquee-item">{t}<i className="marquee-knot" /></span>))}
+      <div className="hero-copy">
+        <div className="container hero-in">
+          <p className="t-label">{h.hero.eyebrow}</p>
+          <h1 id="hero-title" className="t-hero">{h.hero.title}</h1>
+          <p className="hero-lead">{h.hero.lead}</p>
+          <div className="hero-actions">
+            <Button to="/shop/bridal-lehengas" variant="light" size="lg">Shop bridal</Button>
+            <Button to="/shop" variant="outline-light" size="lg">Explore the collection</Button>
           </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function Stories() {
-  const device = useDevice()
-  const wrap = useRef<HTMLElement>(null)
-  const rail = useRef<HTMLDivElement>(null)
-  const c = content.home.campaign
-  const pin = device.finePointer && !device.reducedMotion
-
-  useEffect(() => {
-    if (!pin) return
-    let mm: { revert(): void } | undefined
-    let dead = false
-    import('../lib/motion').then(({ gsap }) => {
-      if (dead) return
-      const m = gsap.matchMedia()
-      mm = m
-      m.add('(min-width: 64rem)', () => {
-      const r = rail.current!
-      const dist = () => r.scrollWidth - window.innerWidth + 64
-      gsap.to(r, {
-        x: () => -dist(), ease: 'none',
-        scrollTrigger: { trigger: wrap.current, start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 0.7, invalidateOnRefresh: true },
-      })
-      })
-    })
-    return () => { dead = true; mm?.revert() }
-  }, [pin])
-
-  return (
-    <section ref={wrap} className="stories" aria-labelledby="stories-title">
-      <div className={`stories-head wrap ${pin ? 'lg:hidden' : ''}`}>
-        <div>
-          <p className="eyebrow" data-reveal>{c.eyebrow}</p>
-          {pin ? <p className="h1" data-reveal>{c.title}</p> : <h2 id="stories-title" className="h1" data-reveal>{c.title}</h2>}
-        </div>
-        <p className="lead measure-lead" data-reveal>{c.lead}</p>
-      </div>
-      <div ref={rail} className={`stories-rail ${pin ? 'is-pinned' : 'rail'}`} data-cursor="Drag" tabIndex={0} role="region" aria-label="Signature stories — scroll sideways">
-        {pin && (
-          <div className="story-intro hidden lg:grid">
-            <p className="eyebrow">{c.eyebrow}</p>
-            <h2 id="stories-title" className="h1">{c.title}</h2>
-            <p className="lead">{c.lead}</p>
-            <span className="story-intro-cue"><Icon name="arrow" size={18} /> Scroll to turn the pages</span>
-          </div>
-        )}
-        {storyProducts.map((p, i) => {
-          const cover = STORY_COVER[p.slug] ? p.story!.slides.find((s) => s.file === STORY_COVER[p.slug])! : null
-          return (
-            <article key={p.slug} className="story">
-              <Link to={`${productUrl(p)}#story`} className="story-media" aria-label={`${p.name} — view the story`} data-cursor="Read">
-                {cover
-                  ? <Img folder="e" name={cover.file} alt={cover.alt} sizes="(min-width: 64rem) 30vw, 78vw" ratio={9 / 16} />
-                  : <Img folder="p" name={p.image.file} alt={p.image.alt} sizes="(min-width: 64rem) 30vw, 78vw" ratio={9 / 16} focus="50% 30%" />}
-                <span className="story-no num">{String(i + 1).padStart(2, '0')} / {String(storyProducts.length).padStart(2, '0')}</span>
-              </Link>
-              <div className="story-body">
-                <p className="eyebrow plain">{p.categoryLabel}</p>
-                <h3 className="h3">{p.name}</h3>
-                <p className="story-line"><em className="v">{p.story!.title}</em> — {p.copy.display ?? p.copy.detail}</p>
-                <div className="story-foot">
-                  <Price inr={p.price.inr} indicative={p.price.placeholder} />
-                  <Link to={productUrl(p)} className="link-thread story-link">View &amp; customise</Link>
-                </div>
-              </div>
-            </article>
-          )
-        })}
-        <div className="story story-end">
-          <p className="italic-voice">{products.length - storyProducts.length} more pieces, each cut to one person.</p>
-          <Button to="/shop" variant="secondary" iconRight="arrow">See every piece</Button>
         </div>
       </div>
     </section>
   )
 }
 
-function CategoryArches() {
-  const e = content.home.edit
+function CategoryStrip() {
   return (
-    <section className="section cats warp-lines" aria-labelledby="cats-title">
-      <div className="wrap">
-        <header className="cats-head">
-          <p className="eyebrow" data-reveal>{e.eyebrow}</p>
-          <h2 id="cats-title" className="h1" data-reveal>{e.title}</h2>
-          <p className="lead measure-lead" data-reveal>{e.lead}</p>
+    <section className="section-sm" aria-labelledby="cats-title">
+      <div className="container">
+        <header className="sec-head">
+          <div><h2 id="cats-title" className="t-h2">Shop by category</h2></div>
+          <Link to="/shop" className="link-u t-small home-all">View all <Icon name="arrow" size={14} /></Link>
         </header>
-        <ul role="list" className="cats-grid">
-          {categories.map((c, i) => {
-            const p = getProduct(CAT_COVER[c.key])!
+        <ul role="list" className="cats rail">
+          {categories.map((c) => {
+            const p = getProduct(COVER[c.key])!
             return (
-              <li key={c.key} className={`cat cat-${i + 1}`} data-reveal>
-                <Link to={categoryUrl(c)} className="cat-link" data-cursor="Enter">
-                  <span className="cat-arch">
-                    <Img folder="p" name={p.image.file} alt="" sizes="(min-width: 64rem) 24vw, (min-width: 48rem) 40vw, 80vw" ratio={3 / 4} focus={p.image.focus} fit="cover" />
-                    <svg className="cat-arch-line" viewBox="0 0 100 133" preserveAspectRatio="none" aria-hidden="true">
-                      <path d="M1 132 V57 C1 37 20 25 33 16 C42 10 47.5 5 50 1 C52.5 5 58 10 67 16 C80 25 99 37 99 57 V132" vectorEffect="non-scaling-stroke" />
-                    </svg>
-                  </span>
-                  <span className="cat-meta">
-                    <span className="cat-no num">{String(i + 1).padStart(2, '0')}</span>
-                    <span className="cat-name">{c.label}</span>
-                    <span className="cat-count">{inCategory(c.key).length} {inCategory(c.key).length === 1 ? 'design' : 'designs'}</span>
-                  </span>
-                  <span className="cat-intro">{c.intro}</span>
+              <li key={c.key}>
+                <Link to={categoryUrl(c)} className="cat">
+                  <Img folder="p" name={p.image.file} alt="" sizes="(min-width: 80rem) 13vw, (min-width: 48rem) 22vw, 38vw" ratio={3 / 4} fit={p.image.fit} focus={p.image.focus} />
+                  <span className="cat-name">{c.label}</span>
+                  <span className="cat-count t-small t-muted">{c.count} {c.count === 1 ? 'piece' : 'pieces'}</span>
                 </Link>
               </li>
             )
@@ -231,107 +76,143 @@ function CategoryArches() {
   )
 }
 
-function NewArrivals() {
-  const fresh = products.filter((p) => p.isNew)
+function BridalFeature() {
+  const c = categories.find((x) => x.key === 'bridal')!
+  const items = BRIDAL_PICKS.map((s) => getProduct(s)!).filter(Boolean)
   return (
-    <section className="section paper-2 fresh" aria-labelledby="fresh-title">
-      <div className="wrap">
-        <header className="fresh-head">
-          <div>
-            <p className="eyebrow" data-reveal>New arrivals</p>
-            <h2 id="fresh-title" className="h1" data-reveal>Fresh off the <em className="v">loom</em></h2>
-          </div>
-          <Button to="/shop?new=1" variant="ghost" iconRight="arrow">All {fresh.length} new pieces</Button>
-        </header>
-      </div>
-      <div className="fresh-rail rail" tabIndex={0} role="region" aria-label="New arrivals — scroll sideways">
-        {fresh.map((p) => (
-          <div key={p.slug} className="fresh-item"><ProductCard p={p} sizes="(min-width: 64rem) 22vw, 70vw" /></div>
-        ))}
-      </div>
-    </section>
-  )
-}
-
-function Studio() {
-  const s = content.home.studio
-  return (
-    <section className="section studio" aria-labelledby="studio-title">
-      <div className="wrap studio-grid">
-        <figure className="studio-portrait" data-reveal="mask">
-          <Img folder="s" name="founder-portrait" alt="Archana Soni, founder of Aarchi's" sizes="(min-width: 64rem) 34vw, 86vw" ratio={4 / 5} focus="50% 30%" />
-        </figure>
-        <div className="studio-copy">
-          <p className="eyebrow" data-reveal>{s.eyebrow}</p>
-          <h2 id="studio-title" className="h1" data-reveal>{s.title}</h2>
-          <ZariRule className="studio-rule" />
-          {s.paragraphs.map((t, i) => <p key={i} className={i ? 'muted' : 'lead'} data-reveal>{t}</p>)}
-          <div className="studio-ctas" data-reveal>
-            <Button to="/about" variant="secondary" iconRight="arrow">Our story</Button>
-            <Button to="/how-it-works" variant="ghost">How a piece is made</Button>
-          </div>
+    <section className="section feature" aria-labelledby="bridal-title">
+      <div className="container feature-grid">
+        <Link to={categoryUrl(c)} className="feature-media" data-reveal aria-label={`Shop ${c.label}`}>
+          <Img folder="e" name="blush-bench" alt={slideAlt('blush-bench')} sizes="(min-width: 64rem) 44vw, 100vw" ratio={4 / 5} focus="50% 45%" />
+        </Link>
+        <div className="feature-body">
+          <header className="feature-head" data-reveal>
+            <p className="t-label">The bridal atelier</p>
+            <h2 id="bridal-title" className="t-h1">{c.label}</h2>
+            <p className="t-lead">{c.intro}</p>
+            <Button to={categoryUrl(c)} variant="secondary">Shop all {c.count} lehengas</Button>
+          </header>
+          <ul role="list" className="feature-products">
+            {items.map((p) => <li key={p.slug} data-reveal><ProductCard p={p} sizes="(min-width: 64rem) 22vw, 46vw" /></li>)}
+          </ul>
         </div>
-        <figure className="studio-detail" data-reveal="mask" aria-hidden="true">
-          <Img folder="s" name="story-lehenga" alt="" sizes="(min-width: 64rem) 18vw, 40vw" ratio={1} />
-        </figure>
       </div>
     </section>
   )
 }
 
-function Process() {
-  const steps = content.howItWorks.steps
+function Occasions() {
+  const occ = occasionsByImportance()
   return (
-    <section className="section night process" aria-labelledby="process-title">
-      <div className="wrap">
-        <header className="process-head">
-          <p className="eyebrow" data-reveal>{content.howItWorks.eyebrow}</p>
-          <h2 id="process-title" className="h1" data-reveal>Made for you, <em className="v">step by step</em></h2>
+    <section className="section bg-ivory" aria-labelledby="occ-title">
+      <div className="container">
+        <header className="sec-head is-center">
+          <div>
+            <p className="t-label">{h.edit.eyebrow}</p>
+            <h2 id="occ-title" className="t-h2">{h.edit.title}</h2>
+            <p className="t-muted measure">{h.edit.lead}</p>
+          </div>
         </header>
-        <ol className="process-thread" role="list">
-          {steps.map((s, i) => (
-            <li key={s.title} className="process-step" data-reveal>
-              <span className="process-knot" aria-hidden="true" />
-              <span className="process-no num">{String(i + 1).padStart(2, '0')}</span>
-              <h3 className="h3">{s.title}</h3>
-              <p className="muted">{s.text}</p>
-            </li>
-          ))}
-        </ol>
-        <div className="process-cta"><Button to="/how-it-works" variant="night" iconRight="arrow">The full process</Button></div>
+        <ul role="list" className="occ rail">
+          {occ.map((o) => {
+            const p = getProduct(OCCASION_COVER[o.value])!
+            return (
+              <li key={o.value} data-reveal>
+                <Link to={`/shop?occ=${encodeURIComponent(o.value)}`} className="occ-tile">
+                  <Img folder="p" name={p.image.file} alt="" sizes="(min-width: 64rem) 22vw, 44vw" ratio={4 / 5} fit={p.image.fit} focus={p.image.focus} />
+                  <span className="occ-copy"><span className="occ-t">{o.value}</span><span className="t-small">{o.count} {o.count === 1 ? 'piece' : 'pieces'}</span></span>
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
       </div>
     </section>
   )
 }
 
-function Faq() {
-  const f = content.home.faq
+function Stories() {
+  const { ref, edge, update, move } = useRail<HTMLUListElement>()
   return (
-    <section className="section faq" aria-labelledby="faq-title" id="faq">
-      <div className="wrap faq-grid">
-        <header>
-          <p className="eyebrow" data-reveal>{f.eyebrow}</p>
-          <h2 id="faq-title" className="h1" data-reveal>{f.title}</h2>
+    <section className="section on-dark stories" aria-labelledby="stories-title">
+      <div className="container">
+        <header className="sec-head">
+          <div>
+            <p className="t-label">{h.campaign.eyebrow}</p>
+            <h2 id="stories-title" className="t-h1">{h.campaign.title}</h2>
+            <p className="t-muted measure">{h.campaign.lead}</p>
+          </div>
+          <RailArrows edge={edge} move={move} />
         </header>
-        <Accordion items={f.items.map((i) => ({ q: i.q, a: i.a }))} />
+        <ul ref={ref} role="list" className="stories-list rail" onScroll={update}>
+          {storyProducts.map((p) => {
+            const s = p.story!
+            const cover = STORY_COVER[p.slug] ?? { folder: 'e' as const, file: s.slides[0].file }
+            const alt = s.slides.find((x) => x.file === cover.file)?.alt ?? `${p.name}, photographed for the Aarchi’s campaign`
+            return (
+              <li key={p.slug}>
+                <Link to={`${productUrl(p)}#story`} className="story">
+                  <Img folder={cover.folder} name={cover.file} alt={alt} sizes="(min-width: 64rem) 24vw, 70vw" ratio={9 / 16} focus="50% 30%" />
+                  <span className="story-copy">
+                    <span className="t-label">{p.categoryLabel}</span>
+                    <span className="story-t">{s.title}</span>
+                    <span className="story-cta">Discover the {p.name} <Icon name="arrow" size={14} /></span>
+                  </span>
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
       </div>
     </section>
   )
 }
 
-function Ahmedabad() {
-  const l = content.home.localSeo
+function Edits() {
   return (
-    <section className="section local paper-2" aria-labelledby="local-title">
-      <BandhaniField className="local-dots" color="var(--sindoor)" opacity={0.1} />
-      <div className="wrap local-grid">
-        <p className="eyebrow" data-reveal>{l.eyebrow}</p>
-        <h2 id="local-title" className="h2" data-reveal>{l.title}</h2>
-        <div className="local-copy">
-          {l.paragraphs.map((t, i) => <p key={i} data-reveal>{t}</p>)}
-          <div className="local-ctas" data-reveal>
-            <Button to="/navratri-outfits-ahmedabad" variant="secondary">Navratri outfits</Button>
-            <Button href={askStylist('a studio visit in Ahmedabad')} variant="ghost" icon="whatsapp">Book a studio visit</Button>
+    <section className="section-sm" aria-label="More to explore">
+      <div className="container edits">
+        <ImageTile to="/shop/sarees" folder="s" file="sarees" alt="A handcrafted saree by Aarchi’s by Archana Soni" label="Handcrafted" title="Sarees" cta="Shop sarees" sizes="(min-width: 48rem) 50vw, 100vw" />
+        <ImageTile to="/navratri-outfits-ahmedabad" folder="s" file="ethnic-festive" alt="Festive ethnic wear by Aarchi’s by Archana Soni" label="Festive & Navratri" title="Made to twirl" cta="Shop the Navratri edit" sizes="(min-width: 48rem) 50vw, 100vw" />
+      </div>
+    </section>
+  )
+}
+
+function MadeToMeasure() {
+  const hw = content.howItWorks
+  return (
+    <section className="section bg-ivory" aria-labelledby="mtm-title">
+      <div className="container mtm">
+        <header className="mtm-head" data-reveal>
+          <p className="t-label">{hw.eyebrow}</p>
+          <h2 id="mtm-title" className="t-h1">{hw.title}</h2>
+          <p className="t-lead">{hw.lead}</p>
+          <div className="mtm-actions">
+            <Button to="/how-it-works" variant="primary">How it works</Button>
+            <Button to="/size-guide" variant="ghost">Size &amp; fit guide</Button>
+          </div>
+        </header>
+        <Steps />
+      </div>
+    </section>
+  )
+}
+
+function Atelier() {
+  return (
+    <section className="section" aria-labelledby="atelier-title">
+      <div className="container atelier">
+        <div className="atelier-media" data-reveal>
+          <Img folder="s" name="founder-portrait" alt={content.about.portraitAlt} sizes="(min-width: 64rem) 44vw, 100vw" ratio={843 / 648} focus="50% 30%" />
+        </div>
+        <div className="atelier-body" data-reveal>
+          <p className="t-label">{h.studio.eyebrow}</p>
+          <h2 id="atelier-title" className="t-h1">{h.studio.title}</h2>
+          {h.studio.paragraphs.map((t) => <p key={t} className="t-lead">{t}</p>)}
+          <div className="atelier-actions">
+            <Button to="/about" variant="secondary">Meet Archana Soni</Button>
+            <Button href={askStylist('a consultation')} variant="ghost" icon="whatsapp">Book a consultation</Button>
           </div>
         </div>
       </div>
@@ -340,23 +221,20 @@ function Ahmedabad() {
 }
 
 function Instagram() {
-  const ig = content.home.instagram
+  const ig = content.contact.social.instagram
   return (
-    <section className="section insta" aria-labelledby="insta-title">
-      <div className="wrap">
-        <header className="insta-head">
-          <div>
-            <p className="eyebrow" data-reveal>{ig.eyebrow}</p>
-            <h2 id="insta-title" className="h1" data-reveal>{ig.title}</h2>
-          </div>
-          <Button href={content.contact.social.instagram.url} variant="ghost" icon="instagram">{content.contact.social.instagram.handle}</Button>
+    <section className="section-sm" aria-labelledby="ig-title">
+      <div className="container">
+        <header className="sec-head">
+          <div><p className="t-label">{h.instagram.eyebrow}</p><h2 id="ig-title" className="t-h2">{h.instagram.title}</h2></div>
+          <a href={ig.url} target="_blank" rel="noopener noreferrer" className="link-u t-small home-all"><Icon name="instagram" size={16} /> {ig.handle}</a>
         </header>
-        <ul role="list" className="insta-grid">
-          {ig.items.map((it, i) => (
-            <li key={i} className="insta-tile" data-reveal>
-              <a href={content.contact.social.instagram.url} target="_blank" rel="noopener noreferrer" data-cursor="Follow">
-                <Img folder="e" name={it.file} alt={it.alt} sizes="(min-width: 64rem) 16vw, 45vw" ratio={9 / 14} />
-                <span className="insta-handle"><Icon name="instagram" size={14} /> {content.contact.social.instagram.handle}</span>
+        <ul role="list" className="ig">
+          {h.instagram.items.map((it) => (
+            <li key={it.file}>
+              <a href={ig.url} target="_blank" rel="noopener noreferrer" className="ig-tile">
+                <Img folder={it.folder === 'editorial' ? 'e' : it.folder === 'site' ? 's' : 'p'} name={it.file} alt={it.alt} sizes="(min-width: 64rem) 16vw, 33vw" ratio={1} focus="50% 30%" />
+                <span className="ig-ov" aria-hidden="true"><Icon name="instagram" size={22} /></span>
               </a>
             </li>
           ))}
@@ -366,45 +244,38 @@ function Instagram() {
   )
 }
 
-function FinalCta() {
-  const f = content.home.finalCta
-  return (
-    <section className="section night final" aria-labelledby="final-title">
-      <div className="wrap final-in">
-        <p className="eyebrow" data-reveal>{f.eyebrow}</p>
-        <h2 id="final-title" className="display final-title" data-reveal>{f.title}</h2>
-        <p className="lead measure-lead" data-reveal>{f.text}</p>
-        <div className="final-ctas" data-reveal>
-          <Button href={askStylist('a made-to-measure piece')} variant="night" icon="whatsapp" size="lg">Get a quote on WhatsApp</Button>
-          <Button to="/contact" variant="ghost">All ways to reach us</Button>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 export default function Home() {
   const root = useRef<HTMLDivElement>(null)
   useReveals(root)
+  const newIn = products.filter((p) => p.isNew)
+  const faq = h.faq.items
   return (
-    <div ref={root} className="home">
+    <div ref={root}>
       <Seo
-        title="Aarchi's by Archana Soni — Made-to-measure bridal & festive couture, Ahmedabad"
-        description={content.brand.schemaDescription}
-        jsonLd={[ORG_LD, { '@context': 'https://schema.org', '@type': 'WebSite', name: content.brand.name, url: SITE_URL + '/' }, faqLd(content.home.faq.items)]}
+        title="Aarchi's by Archana Soni — Bridal & festive couture, made to measure"
+        description={h.hero.lead}
+        jsonLd={[ORG_LD, { '@context': 'https://schema.org', '@type': 'WebSite', name: "Aarchi's by Archana Soni", url: SITE_URL + '/', potentialAction: { '@type': 'SearchAction', target: `${SITE_URL}/search?q={search_term_string}`, 'query-input': 'required name=search_term_string' } }, faqLd(faq)]}
       />
       <Hero />
-      <Marquee />
+      <CategoryStrip />
+      <ProductRail items={newIn} label="Just in" title="New arrivals" id="new" action={<Link to="/shop?new=1" className="link-u t-small home-all">Shop new <Icon name="arrow" size={14} /></Link>} />
+      <BridalFeature />
+      <Occasions />
+      <Edits />
       <Stories />
-      <CategoryArches />
-      <NewArrivals />
-      <Studio />
-      <Process />
-      <Faq />
-      <Ahmedabad />
+      <MadeToMeasure />
+      <Atelier />
       <Testimonials />
       <Instagram />
-      <FinalCta />
+      <FaqSection label={h.faq.eyebrow} title={h.faq.title} items={faq} />
+      <section className="section-sm home-local-sec" aria-labelledby="local-title">
+        <div className="container home-local">
+          <p className="t-label t-muted">{h.localSeo.eyebrow}</p>
+          <h2 id="local-title" className="t-h3">{h.localSeo.title}</h2>
+          <div className="home-local-cols">{h.localSeo.paragraphs.map((t) => <p key={t} className="t-small t-muted">{t}</p>)}</div>
+        </div>
+      </section>
+      <RecentlyViewed />
     </div>
   )
 }

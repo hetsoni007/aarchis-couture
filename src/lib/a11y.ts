@@ -1,9 +1,13 @@
-import { useEffect, type RefObject } from 'react'
+import { useEffect, useRef, type RefObject } from 'react'
 
 const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
 
 /** Trap Tab inside `ref` while `active`; restore focus to the opener on close. */
 export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean, onEscape?: () => void) {
+  // Callers pass inline closures; keeping the latest one in a ref stops every re-render (each keystroke in a
+  // dialog) from tearing the trap down, which would bounce focus back to the opener mid-typing.
+  const escape = useRef(onEscape)
+  escape.current = onEscape
   useEffect(() => {
     if (!active) return
     const root = ref.current
@@ -12,7 +16,7 @@ export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean
     const first = () => root.querySelectorAll<HTMLElement>(FOCUSABLE)[0]
     const t = setTimeout(() => (root.querySelector<HTMLElement>('[data-autofocus]') ?? first() ?? root).focus({ preventScroll: true }), 40)
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { e.stopPropagation(); onEscape?.(); return }
+      if (e.key === 'Escape') { e.stopPropagation(); escape.current?.(); return }
       if (e.key !== 'Tab') return
       const items = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE)).filter((el) => el.offsetParent !== null || el === document.activeElement)
       if (!items.length) return
@@ -26,5 +30,5 @@ export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean
       document.removeEventListener('keydown', onKey, true)
       opener?.focus?.({ preventScroll: true })
     }
-  }, [active, ref, onEscape])
+  }, [active, ref])
 }

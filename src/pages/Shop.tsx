@@ -1,217 +1,214 @@
-import { Suspense, lazy, useMemo, useRef, useState } from 'react'
-import { Link, Navigate, useParams, useLocation } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, Navigate, useLocation, useParams, useSearchParams } from 'react-router-dom'
 import { Seo, breadcrumbLd, ORG_LD } from '../lib/seo'
 import { categories, categoryBySlug, categoryUrl, content, inCategory, products, type Category } from '../lib/catalog'
-import { facetGroups, facetLabel, matches, sortProducts, SORTS, useFacets, type SortKey } from '../lib/filters'
-import { useDevice, useIdleReady } from '../lib/device'
-import { useReveals } from '../lib/reveal'
+import { facetGroups, facetLabel, matches, sortProducts, SORTS, useFacets, type Facets, type SortKey } from '../lib/filters'
+import { searchProducts } from '../lib/search'
+import { NAV_LABEL } from '../lib/nav'
+import { askStylist } from '../lib/whatsapp'
 import { cx, plural } from '../lib/format'
+import { useUi } from '../store/ui'
 import { ProductGrid } from '../components/product/ProductCard'
-import { EmptyState } from '../components/ui/EmptyState'
+import { RecentlyViewed } from '../components/product/Rails'
 import { Button } from '../components/ui/Button'
-import { Chip, Crumbs, Sheet } from '../components/ui/Kit'
+import { Chip, Crumbs, Drawer } from '../components/ui/Kit'
+import { EmptyState } from '../components/ui/EmptyState'
 import { Icon } from '../components/ui/Icon'
-import { AmbientFallback } from '../components/brand/AmbientFallback'
-import type { AmbientMode } from '../components/three/Ambient'
 import './shop.css'
 
-const Ambient = lazy(() => import('../components/three/Ambient'))
+const PAGE = 12
+const NO_FACETS: Facets = { cat: [], occ: [], col: [], fab: [], price: [], style: [], isNew: false }
+type Groups = ReturnType<typeof facetGroups>
 
-/** Adapted intros — written for this build from the studio's own category lines (shown beneath, verbatim). */
-const EDITORIAL: Record<string, { kicker: string; title: string; adapted: string; aside?: { text: string; to: string; label: string } }> = {
-  bridal: {
-    kicker: 'The bridal edit', title: 'Bridal Lehengas',
-    adapted: 'Every lehenga here is a starting point. Keep the silhouette, change the colour, deepen the zardozi — Archana cuts the final piece to you alone.',
-    aside: { text: 'Marrying abroad or ordering from outside India?', to: '/nri-brides', label: 'How NRI brides order' },
-  },
-  saree: {
-    kicker: 'The drape edit', title: 'Sarees',
-    adapted: 'From rani-pink silk worked in gold to linen silk patched with gamthi — drapes hand-finished in the studio and ready to be re-coloured for your celebration.',
-  },
-  dupatta: {
-    kicker: 'The finishing layer', title: 'Dupattas',
-    adapted: 'Gharchola checks, bandhej ombré and pearl-white jaal on scarlet net. One size, nothing to measure — the quickest way to bring a look home.',
-  },
-  dressmaterial: {
-    kicker: 'Unstitched silk', title: 'Dress Material',
-    adapted: 'Pure silk suit pieces, each with its matching dupatta. Take the fabric as it is, or have it tailored to your measurements at the Ahmedabad studio.',
-  },
-  ethnic: {
-    kicker: 'The festive edit', title: 'Ethnic & Festive',
-    adapted: 'Anarkalis, ensembles and dresses for sangeet, garba and every festive evening in between — made to twirl, made to measure.',
-    aside: { text: 'Nine nights of garba ahead?', to: '/navratri-outfits-ahmedabad', label: 'The Navratri edit' },
-  },
-  mens: {
-    kicker: 'For the groom', title: 'Men’s Ethnic',
-    adapted: 'For the groom and the men of the celebration — tailored to your measurements, in the colours the day calls for.',
-  },
-  babyshower: {
-    kicker: 'For the mum-to-be', title: 'Baby Shower & Maternity',
-    adapted: 'Bespoke baby-shower outfits for the mum-to-be, made to measure for the day itself and detailed to be remembered.',
-  },
-}
-
-function FilterPanel({ scope, base }: { scope?: Category; base: typeof products }) {
-  const { facets, toggle, setNew, activeCount, clear } = useFacets()
-  const groups = facetGroups(base, facets, scope?.key)
-  const newCount = base.filter((p) => p.isNew && matches(p, { ...facets, isNew: false })).length
+function FilterPanel({ groups, facets, toggle, setNew, hasNew, idPrefix }: {
+  groups: Groups; facets: Facets; toggle: (k: Groups[number]['key'], v: string) => void; setNew: (v: boolean) => void; hasNew: boolean; idPrefix: string
+}) {
   return (
-    <div className="fpanel">
-      {newCount > 0 && (
-        <label className="fswitch">
-          <input type="checkbox" role="switch" checked={facets.isNew} onChange={(e) => setNew(e.target.checked)} />
-          <span className="fswitch-track" aria-hidden="true"><i /></span>
-          <span>New arrivals only <span className="fcount num">{newCount}</span></span>
+    <div className="fp">
+      {hasNew && (
+        <label className="fp-toggle">
+          <input type="checkbox" checked={facets.isNew} onChange={(e) => setNew(e.target.checked)} />
+          <span className="fp-box" aria-hidden="true"><Icon name="check" size={12} /></span>
+          <span>New arrivals only</span>
         </label>
       )}
-      {groups.map((g) => (
-        <details key={g.key} className="fgroup" open={g.key !== 'style'}>
-          <summary className="fgroup-title">{g.label}<Icon name="chevron" size={16} /></summary>
-          <ul role="list" className={cx('fopts', g.key === 'col' && 'is-swatches')}>
-            {g.options.map((o) => {
-              const on = (facets[g.key] as string[]).includes(o.value)
-              return (
-                <li key={o.value}>
-                  <label className={cx('fopt', on && 'is-on', !o.count && !on && 'is-empty')}>
-                    <input type="checkbox" checked={on} disabled={!o.count && !on} onChange={() => toggle(g.key, o.value)} />
-                    {o.swatch ? <span className="fswatch" style={{ background: o.swatch }} aria-hidden="true" /> : <span className="fbox" aria-hidden="true"><Icon name="check" size={12} /></span>}
-                    <span className="fopt-label">{o.label}</span>
-                    <span className="fcount num">{o.count}</span>
-                  </label>
-                </li>
-              )
-            })}
-          </ul>
-        </details>
-      ))}
-      {activeCount > 0 && <button className="fclear link-thread" onClick={clear}>Clear all filters</button>}
+      {groups.map((g, gi) => {
+        const on = facets[g.key] as string[]
+        return (
+          <details key={g.key} className="fp-group" open={gi < 3 || on.length > 0 || undefined}>
+            <summary className="fp-sum">
+              <span>{g.label}{on.length > 0 && <span className="fp-n"> ({on.length})</span>}</span>
+              <Icon name="plus" size={16} className="acc-ic" />
+            </summary>
+            <ul role="list" className={cx('fp-opts', g.key === 'col' && 'is-colours')}>
+              {g.options.map((o) => {
+                const checked = on.includes(o.value)
+                const id = `${idPrefix}-${g.key}-${o.value}`.replace(/[^\w-]/g, '')
+                return (
+                  <li key={o.value}>
+                    <label htmlFor={id} className={cx('fp-opt', !o.count && !checked && 'is-empty')}>
+                      <input id={id} type="checkbox" checked={checked} disabled={!o.count && !checked} onChange={() => toggle(g.key, o.value)} />
+                      {o.swatch ? <span className="fp-sw" style={{ background: o.swatch }} aria-hidden="true" /> : <span className="fp-box" aria-hidden="true"><Icon name="check" size={12} /></span>}
+                      <span className="fp-label">{o.label}</span>
+                      <span className="fp-count t-num">{o.count}</span>
+                    </label>
+                  </li>
+                )
+              })}
+            </ul>
+          </details>
+        )
+      })}
     </div>
   )
 }
 
+function SortSelect({ sort, setSort, relevance }: { sort: SortKey; setSort: (s: SortKey) => void; relevance?: boolean }) {
+  return (
+    <label className="sort">
+      <span className="sort-label">Sort</span>
+      <select value={sort} onChange={(e) => setSort(e.target.value as SortKey)} aria-label="Sort by">
+        {SORTS.map((s) => <option key={s.id} value={s.id}>{s.id === 'featured' && relevance ? 'Best match' : s.label}</option>)}
+      </select>
+      <Icon name="chevron" size={14} className="sort-chev" />
+    </label>
+  )
+}
+
+function CategoryPills({ scope }: { scope?: Category }) {
+  return (
+    <nav aria-label="Categories" className="pills-wrap">
+      <ul role="list" className="pills rail">
+        <li><Link to="/shop" className={cx('pill', !scope && 'is-on')} aria-current={!scope ? 'page' : undefined}>All</Link></li>
+        {categories.map((c) => (
+          <li key={c.key}><Link to={categoryUrl(c)} className={cx('pill', scope?.key === c.key && 'is-on')} aria-current={scope?.key === c.key ? 'page' : undefined}>{NAV_LABEL[c.key]}</Link></li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
 export default function Shop() {
-  const { category: slug } = useParams()
+  const { category } = useParams()
   const { pathname } = useLocation()
-  const scope = slug ? categoryBySlug(slug) : undefined
-  const device = useDevice()
-  const idle = useIdleReady()
-  const { facets, sort, setSort, toggle, setNew, clear, activeCount } = useFacets()
-  const [sheet, setSheet] = useState(false)
-  const root = useRef<HTMLDivElement>(null)
-  const head = useRef<HTMLElement>(null)
-  useReveals(root, [slug])
+  const [params] = useSearchParams()
+  const isSearch = pathname.startsWith('/search')
+  const scope = categoryBySlug(category)
+  const url = useFacets()
+  // Prerendered HTML is built without a query string, so the query only applies once hydration is done —
+  // otherwise a direct load of /shop?occ=Wedding or /search?q=red would mismatch the server markup.
+  const hydrated = useUi((s) => s.hydrated)
+  const q = hydrated ? (params.get('q') ?? '').trim() : ''
+  const facets = hydrated ? url.facets : NO_FACETS
+  const sort: SortKey = hydrated ? url.sort : 'featured'
+  const activeCount = hydrated ? url.activeCount : 0
+  const { toggle, setNew, setSort, clear } = url
+  const [limit, setLimit] = useState(PAGE)
+  const [drawer, setDrawer] = useState(false)
+  const [sidebar, setSidebar] = useState(true)
 
-  const base = useMemo(() => (scope ? inCategory(scope.key) : products), [scope])
-  const shown = useMemo(() => sortProducts(base.filter((p) => matches(p, facets)), sort), [base, facets, sort])
+  const base = useMemo(() => (isSearch ? searchProducts(q, 100) : scope ? inCategory(scope.key) : products), [isSearch, q, scope])
+  const shown = useMemo(() => {
+    const f = base.filter((p) => matches(p, facets))
+    return isSearch && sort === 'featured' ? f : sortProducts(f, sort) // search keeps relevance order by default
+  }, [base, facets, sort, isSearch])
+  const groups = useMemo(() => facetGroups(base, facets, scope?.key), [base, facets, scope])
+  const filterKey = JSON.stringify([facets, sort, q, category])
+  useEffect(() => setLimit(PAGE), [filterKey])
 
-  if (slug && !scope) return <Navigate to="/shop" replace />
-  if (pathname === '/catalogue') return <Navigate to="/shop" replace />
+  if (category && !scope) return <Navigate to="/shop" replace />
+  if (pathname.startsWith('/catalogue')) return <Navigate to="/shop" replace />
 
-  const ed = scope ? EDITORIAL[scope.key] : undefined
-  const title = scope ? `${ed!.title} — made to measure in Ahmedabad` : 'The Collections — every piece, made to measure'
+  const title = isSearch ? (q ? `Results for “${q}”` : 'Search') : scope ? scope.label : 'All pieces'
+  const lead = isSearch ? null : scope ? scope.intro : content.catalogueLead
+  const seoTitle = isSearch ? 'Search the collection' : scope ? `${scope.label} — made to measure in Ahmedabad` : 'Shop the collection — bridal, sarees & festive wear, made to measure'
   const desc = scope ? `${scope.intro} ${plural(base.length, 'design')}, customisable in colour, fabric and size, shipped worldwide from Ahmedabad.` : content.catalogueLead
   const chips = (['cat', 'occ', 'col', 'fab', 'price', 'style'] as const).flatMap((k) => (facets[k] as string[]).map((v) => ({ k, v })))
+  const hasNew = base.some((p) => p.isNew)
+  const visible = shown.slice(0, limit)
+  const panelProps = { groups, facets, toggle, setNew, hasNew }
 
   return (
-    <div ref={root} className="shop" key={slug ?? 'all'}>
-      <Seo title={title} description={desc}
-        jsonLd={[ORG_LD, breadcrumbLd([{ name: 'Collections', path: '/shop/' }, ...(scope ? [{ name: scope.label }] : [])]), {
-          '@context': 'https://schema.org', '@type': 'CollectionPage', name: scope ? scope.label : 'Collections', description: desc,
+    <div className="shop">
+      <Seo title={seoTitle} description={desc} noindex={isSearch}
+        jsonLd={[ORG_LD, breadcrumbLd([{ name: 'Home', path: '/' }, { name: 'Shop', path: '/shop/' }, ...(scope ? [{ name: scope.label }] : [])]), {
+          '@context': 'https://schema.org', '@type': 'CollectionPage', name: scope ? scope.label : 'The collection', description: desc,
         }]} />
 
-      {scope ? (
-        <header ref={head} className={cx('shop-hero', scope.key === 'babyshower' ? 'is-pastel' : 'night')} data-nav-night={scope.key !== 'babyshower' || undefined}>
-          <div className="shop-ambient" aria-hidden="true">
-            <AmbientFallback mode={scope.ambient as AmbientMode} />
-            {device.tier !== 'none' && idle && (
-              <Suspense fallback={null}><Ambient mode={scope.ambient as AmbientMode} device={device} eventSource={head} /></Suspense>
-            )}
-          </div>
-          <div className="wrap shop-hero-in">
-            <Crumbs trail={[{ name: 'Collections', to: '/shop' }, { name: scope.label }]} />
-            <p className="eyebrow">{ed!.kicker}</p>
-            <h1 className="h1 shop-title">{ed!.title}</h1>
-            <p className="lead shop-adapted">{ed!.adapted}</p>
-            <p className="italic-voice shop-verbatim">“{scope.intro}”</p>
-            <p className="shop-count num">{plural(base.length, 'design')} · made to measure in Ahmedabad · shipped worldwide</p>
-            {ed!.aside && (
-              <p className="shop-aside">{ed!.aside.text} <Link to={ed!.aside.to} className="prose-link">{ed!.aside.label}</Link></p>
-            )}
-          </div>
-        </header>
-      ) : (
-        <header className="shop-plain warp-lines">
-          <div className="wrap">
-            <Crumbs trail={[{ name: 'Home', to: '/' }, { name: 'Collections' }]} />
-            <p className="eyebrow">The Catalogue</p>
-            <h1 className="h1">The <em className="v">Collections</em></h1>
-            <p className="lead measure-lead">{content.catalogueLead}</p>
-            <p className="shop-count num">{products.length} designs · {categories.length} categories · made to measure in Ahmedabad</p>
-          </div>
-        </header>
-      )}
-
-      <nav className="cat-tabs" aria-label="Categories">
-        <div className="wrap">
-          <ul role="list" className="rail">
-            <li><Link to="/shop" className={cx('cat-tab', !scope && 'is-on')} aria-current={!scope ? 'page' : undefined}>All <span className="num">{products.length}</span></Link></li>
-            {categories.map((c) => (
-              <li key={c.key}>
-                <Link to={categoryUrl(c)} className={cx('cat-tab', scope?.key === c.key && 'is-on')} aria-current={scope?.key === c.key ? 'page' : undefined}>
-                  {c.label} <span className="num">{inCategory(c.key).length}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+      <header className="shop-head container">
+        <Crumbs trail={[{ name: 'Home', to: '/' }, ...(scope || isSearch ? [{ name: 'Shop', to: '/shop' }] : []), { name: isSearch ? 'Search' : scope ? scope.label : 'Shop' }]} />
+        <div className="shop-title">
+          <h1 className="t-h1">{title}</h1>
+          {lead && <p className="t-muted measure">{lead}</p>}
+          {isSearch && q && <p className="t-muted">{plural(base.length, 'piece')} found. Every design can be customised to your brief.</p>}
         </div>
-      </nav>
+        {!isSearch && <CategoryPills scope={scope} />}
+      </header>
 
-      <div className="wrap shop-body">
-        <aside className="shop-side hidden lg:block" aria-label="Refine">
-          <p className="eyebrow">Refine</p>
-          <FilterPanel scope={scope} base={base} />
-        </aside>
+      <div className="shop-bar">
+        <div className="container shop-bar-in">
+          <button className="shop-filter lg:hidden" onClick={() => setDrawer(true)} aria-haspopup="dialog">
+            <Icon name="sliders" size={16} /> Filter{activeCount > 0 && <span className="shop-filter-n">{activeCount}</span>}
+          </button>
+          <button className="shop-filter hidden lg:inline-flex" onClick={() => setSidebar((v) => !v)} aria-expanded={sidebar} aria-controls="shop-side">
+            <Icon name="sliders" size={16} /> {sidebar ? 'Hide filters' : 'Show filters'}{activeCount > 0 && <span className="shop-filter-n">{activeCount}</span>}
+          </button>
+          <p className="shop-count t-small t-muted" aria-live="polite">{plural(shown.length, 'piece')}</p>
+          <SortSelect sort={sort} setSort={setSort} relevance={isSearch} />
+        </div>
+      </div>
 
-        <section className="shop-main" aria-labelledby="pieces-title">
-          <h2 id="pieces-title" className="sr-only">{scope ? `${scope.label} — every piece` : 'Every piece'}</h2>
-          <div className="shop-toolbar">
-            <p className="shop-results" aria-live="polite"><span className="num">{shown.length}</span> {shown.length === 1 ? 'piece' : 'pieces'}</p>
-            <button className="btn btn-secondary btn-sm lg:hidden" onClick={() => setSheet(true)} aria-haspopup="dialog">
-              <Icon name="filter" size={18} className="btn-ic" /><span className="btn-label">Refine{activeCount ? ` · ${activeCount}` : ''}</span>
-            </button>
-            <label className="sortsel">
-              <span className="sr-only">Sort</span>
-              <select value={sort} onChange={(e) => setSort(e.target.value as SortKey)}>
-                {SORTS.map((s) => <option key={s.id} value={s.id}>{s.label}</option>)}
-              </select>
-              <Icon name="chevron" size={16} />
-            </label>
-          </div>
+      <div className={cx('container shop-body', sidebar && 'has-side')}>
+        {sidebar && (
+          <aside id="shop-side" className="shop-side hidden lg:block" aria-label="Filters">
+            <FilterPanel {...panelProps} idPrefix="side" />
+          </aside>
+        )}
+        <section className="shop-main" aria-labelledby="shop-results">
+          <h2 id="shop-results" className="sr-only">{isSearch ? 'Search results' : 'Products'}</h2>
           {(chips.length > 0 || facets.isNew) && (
             <div className="shop-chips">
               {facets.isNew && <Chip onRemove={() => setNew(false)}>New arrivals</Chip>}
               {chips.map(({ k, v }) => <Chip key={k + v} onRemove={() => toggle(k, v)}>{facetLabel(k, v)}</Chip>)}
-              <button className="link-thread fclear" onClick={clear}>Clear all</button>
+              <button className="link t-small" onClick={clear}>Clear all</button>
             </div>
           )}
+
           {shown.length ? (
-            <ProductGrid items={shown} dense priorityCount={scope ? 0 : 3} />
+            <>
+              <ProductGrid items={visible} className={sidebar ? 'is-3' : undefined} priorityCount={2}
+                sizes={sidebar ? '(min-width: 80rem) 24vw, (min-width: 64rem) 30vw, (min-width: 48rem) 31vw, 48vw' : undefined} />
+              <div className="shop-more">
+                <p className="t-small t-muted">Showing {visible.length} of {shown.length}</p>
+                <span className="shop-progress" aria-hidden="true"><i style={{ width: `${(visible.length / shown.length) * 100}%` }} /></span>
+                {visible.length < shown.length && <Button variant="secondary" onClick={() => setLimit((n) => n + PAGE)}>Load more</Button>}
+              </div>
+              <p className="shop-note t-small t-muted">Prices marked <em>indicative</em> are starting points. Your final quote, shaped by fabric, hand-work and your changes, is confirmed with Archana before anything is charged.</p>
+            </>
           ) : (
-            <EmptyState kind="results" title="No piece matches all of that."
-              actions={<><Button onClick={clear}>Loosen every thread</Button><Button to="/contact" variant="ghost">Describe it to a stylist</Button></>}>
-              Loosen a thread or two — or tell us what you have in mind. Every design here is a starting point anyway.
+            <EmptyState kind="results" title={isSearch && !activeCount ? (q ? `Nothing matches “${q}” yet` : 'Search the collection') : 'No pieces match those filters'}
+              actions={<>
+                {activeCount > 0 && <Button onClick={clear}>Clear filters</Button>}
+                {isSearch && <Button to="/shop" variant={activeCount ? 'secondary' : 'primary'}>Browse everything</Button>}
+                <Button href={askStylist(q ? `something like “${q}”` : 'finding the right piece')} variant="ghost" icon="whatsapp">Describe it to a stylist</Button>
+              </>}>
+              Every design can be made to your brief, in the colour, fabric and fit you choose.
             </EmptyState>
           )}
         </section>
       </div>
 
-      <Sheet open={sheet} onClose={() => setSheet(false)} title="Refine"
-        footer={<div className="sheet-actions">
-          <Button variant="ghost" onClick={clear} disabled={!activeCount}>Clear</Button>
-          <Button onClick={() => setSheet(false)} data-autofocus>{`Show ${shown.length} ${shown.length === 1 ? 'piece' : 'pieces'}`}</Button>
-        </div>}>
-        <FilterPanel scope={scope} base={base} />
-      </Sheet>
+      <Drawer open={drawer} onClose={() => setDrawer(false)} title="Filter" side="left" mobile="side"
+        footer={
+          <div className="shop-drawer-foot">
+            <Button variant="secondary" onClick={clear} disabled={!activeCount}>Clear all</Button>
+            <Button onClick={() => setDrawer(false)}>Show {plural(shown.length, 'piece')}</Button>
+          </div>
+        }>
+        <FilterPanel {...panelProps} idPrefix="drawer" />
+      </Drawer>
+
+      <RecentlyViewed />
     </div>
   )
 }

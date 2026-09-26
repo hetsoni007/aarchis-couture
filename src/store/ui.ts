@@ -6,7 +6,11 @@ interface UiState {
   hydrated: boolean
   setHydrated: () => void
   bagOpen: boolean
+  searchOpen: boolean
+  setSearch: (v: boolean) => void
   menuOpen: boolean
+  quick: string | null
+  setQuick: (slug: string | null) => void
   toasts: Toast[]
   bagBump: number
   setBag: (v: boolean) => void
@@ -21,11 +25,15 @@ export const useUi = create<UiState>()((set, get) => ({
   hydrated: false,
   setHydrated: () => set({ hydrated: true }),
   bagOpen: false,
+  searchOpen: false,
+  setSearch: (searchOpen) => set({ searchOpen, menuOpen: false, bagOpen: false }),
   menuOpen: false,
+  quick: null,
+  setQuick: (quick) => set({ quick }),
   toasts: [],
   bagBump: 0,
-  setBag: (bagOpen) => set({ bagOpen, menuOpen: false }),
-  setMenu: (menuOpen) => set({ menuOpen, bagOpen: false }),
+  setBag: (bagOpen) => set({ bagOpen, menuOpen: false, searchOpen: false }),
+  setMenu: (menuOpen) => set({ menuOpen, bagOpen: false, searchOpen: false }),
   toast: (t) => {
     const id = ++seq
     set({ toasts: [...get().toasts.slice(-2), { ...t, id }] })

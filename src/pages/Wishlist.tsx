@@ -1,55 +1,54 @@
-import { PageLoader } from '../components/brand/Motifs'
 import { Seo } from '../lib/seo'
 import { getProduct, type Product } from '../lib/catalog'
+import { plural } from '../lib/format'
 import { useWishlist } from '../store/wishlist'
-import { useBag } from '../store/bag'
 import { useUi } from '../store/ui'
+import { ProductCard, useAddToBag } from '../components/product/ProductCard'
 import { defaultCustom } from '../components/product/customLabels'
-import { ProductCard } from '../components/product/ProductCard'
+import { RecentlyViewed } from '../components/product/Rails'
 import { EmptyState } from '../components/ui/EmptyState'
 import { Button } from '../components/ui/Button'
-import { Crumbs } from '../components/ui/Kit'
-import { plural } from '../lib/format'
+import { Crumbs, PageLoader } from '../components/ui/Kit'
 import './content.css'
 
 export default function Wishlist() {
   const slugs = useWishlist((s) => s.slugs)
   const remove = useWishlist((s) => s.remove)
-  const add = useBag((s) => s.add)
-  const toast = useUi((s) => s.toast)
-  const setBag = useUi((s) => s.setBag)
-  const items = slugs.map(getProduct).filter(Boolean) as Product[]
+  const addToBag = useAddToBag()
   const hydrated = useUi((s) => s.hydrated)
-  if (!hydrated) return <PageLoader />
+  const items = slugs.map(getProduct).filter(Boolean) as Product[]
   return (
-    <div className="wrap content-page">
-      <Seo title="Wishlist" description="Pieces you have pinned at Aarchi's by Archana Soni." noindex />
-      <Crumbs trail={[{ name: 'Home', to: '/' }, { name: 'Wishlist' }]} />
-      <header className="acc-head">
-        <p className="eyebrow">Pinned pieces</p>
-        <h1 className="h1">Wishlist</h1>
-        {items.length > 0 && <p className="muted">{plural(items.length, 'piece')} pinned on this device.</p>}
-      </header>
-      {items.length ? (
-        <ul role="list" className="pgrid is-dense wish-grid">
-          {items.map((p) => (
-            <li key={p.slug} className="wish-item">
-              <ProductCard p={p} sizes="(min-width: 90rem) 22vw, (min-width: 64rem) 30vw, (min-width: 37.5rem) 46vw, 92vw" />
-              <div className="wish-actions">
-                <Button size="sm" variant="secondary" onClick={() => {
-                  add(p.slug, defaultCustom(p)); remove(p.slug)
-                  toast({ message: `${p.name} — folded into your bag.`, tone: 'success', action: { label: 'View bag', run: () => setBag(true) } })
-                }}>Move to bag</Button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <EmptyState kind="wishlist" title="Nothing pinned yet."
-          actions={<><Button to="/shop">Browse the collections</Button><Button to="/shop?new=1" variant="ghost">New arrivals</Button></>}>
-          Tap the heart on any piece to keep it close — your pins stay on this device.
-        </EmptyState>
-      )}
+    <div className="acct">
+      <Seo title="Wishlist" description="Pieces you have saved at Aarchi's by Archana Soni." noindex />
+      <div className="container">
+        <Crumbs trail={[{ name: 'Home', to: '/' }, { name: 'Wishlist' }]} className="acct-crumbs" />
+        <header className="acct-head">
+          <h1 className="t-h1">Wishlist</h1>
+          {hydrated && items.length > 0 && <p className="t-muted">{plural(items.length, 'piece')} saved on this device.</p>}
+        </header>
+        {!hydrated ? <PageLoader /> : items.length ? (
+          <>
+          <h2 className="sr-only">Saved pieces</h2>
+          <ul role="list" className="pgrid wl-grid">
+            {items.map((p) => (
+              <li key={p.slug} className="wl-item">
+                <ProductCard p={p} />
+                <div className="wl-actions">
+                  <Button size="sm" block onClick={() => { addToBag(p, defaultCustom(p)); remove(p.slug) }}>Move to bag</Button>
+                  <button className="link t-small" onClick={() => remove(p.slug)}>Remove</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+          </>
+        ) : (
+          <EmptyState kind="wishlist" title="Your wishlist is empty"
+            actions={<><Button to="/shop">Shop the collection</Button><Button to="/shop?new=1" variant="secondary">New arrivals</Button></>}>
+            Tap the heart on any piece to save it here. Your wishlist stays on this device.
+          </EmptyState>
+        )}
+      </div>
+      <RecentlyViewed />
     </div>
   )
 }

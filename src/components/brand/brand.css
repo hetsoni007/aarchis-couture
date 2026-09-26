@@ -1,50 +1,10 @@
 @layer components {
-/* ── wordmark ─────────────────────────────────────────────── */
-.wordmark { display: inline-flex; align-items: center; gap: 12px; color: var(--ink); line-height: 1; }
-.wordmark-mark { flex: none; }
-.wordmark-text { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 6px; }
-.wordmark-name {
-  font-family: var(--font-display); font-variation-settings: "opsz" 14; font-weight: 560;
-  font-size: 1.32rem; letter-spacing: 0.16em; display: inline-flex; align-items: center; padding-bottom: 5px;
-  border-bottom: 1px solid color-mix(in srgb, currentColor 40%, transparent);
-}
-.wordmark-bindu {
-  display: inline-block; width: 0.26em; height: 0.26em; margin: 0 0.12em 0.42em 0.02em;
-  background: var(--zari); transform: rotate(45deg); align-self: flex-start; margin-top: 0.02em;
-}
-.wordmark-by { font-family: var(--font-sans); font-size: 0.56rem; font-weight: 500; letter-spacing: 0.34em; text-transform: uppercase; color: var(--ink-soft); }
-.wordmark.is-compact .wordmark-name { font-size: 1.06rem; border-bottom: 0; padding-bottom: 0; }
-.night .wordmark-bindu { background: var(--zari-light); }
-
-/* ── zari rule ────────────────────────────────────────────── */
-.zari-rule { display: flex; align-items: center; gap: 10px; color: var(--zari); width: 100%; }
-.zr-wing { flex: 1; height: 2px; background: currentColor; clip-path: polygon(0 50%, 100% 0, 100% 100%); opacity: 0.85; }
-.zr-wing.is-r { clip-path: polygon(0 0, 100% 50%, 0 100%); }
-.zr-knot { display: inline-flex; gap: 4px; align-items: center; }
-.zr-knot i { width: 5px; height: 5px; background: currentColor; transform: rotate(45deg); }
-.zr-knot i:nth-child(2) { width: 8px; height: 8px; }
-
-.bandhani-field, .jaal { position: absolute; inset: 0; pointer-events: none; }
-
-/* ── loader ───────────────────────────────────────────────── */
-.loom-loader { display: inline-flex; flex-direction: column; align-items: center; gap: 10px; color: var(--zari); }
-.loom-loader svg { width: 96px; height: auto; overflow: visible; }
-.loom-loader.is-inline svg { width: 56px; }
-.ll-warp { stroke: currentColor; stroke-width: 0.8; opacity: 0.55; }
-.ll-weft { fill: none; stroke: var(--sindoor); stroke-width: 1.4; stroke-dasharray: 130; stroke-dashoffset: 130; animation: ll-weft 1.6s var(--ease-io) infinite; }
-.ll-shuttle { fill: currentColor; offset-path: path("M4 24 C16 18 28 30 38 24 S60 18 60 24 82 30 82 24 104 18 116 24"); animation: ll-shuttle 1.6s var(--ease-io) infinite; }
-.ll-label { font-size: var(--fs-eyebrow); letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-soft); }
-@keyframes ll-weft { 0% { stroke-dashoffset: 130; } 55% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -130; } }
-@keyframes ll-shuttle { 0% { offset-distance: 0%; } 55%, 100% { offset-distance: 100%; } }
-
-.page-loader { min-height: 70vh; display: grid; place-items: center; align-content: center; gap: 18px; color: var(--ink); }
-
-/* monogram draw-on */
-svg[data-animated] .mg-arch, svg[data-animated] .mg-thread { stroke-dasharray: 160; stroke-dashoffset: 160; animation: mg-draw 1.6s var(--ease-io) forwards; }
-svg[data-animated] .mg-thread { animation-delay: 0.5s; }
-svg[data-animated] .mg-a { opacity: 0; animation: mg-fade 0.6s 0.3s forwards; }
-svg[data-animated] .mg-bindu, svg[data-animated] .mg-knot { opacity: 0; animation: mg-fade 0.4s 1s forwards; }
-@keyframes mg-draw { to { stroke-dashoffset: 0; } }
-@keyframes mg-fade { to { opacity: 1; } }
-
+.logo { display: inline-grid; justify-items: center; gap: 2px; color: var(--ink); line-height: 1; }
+.logo-name { font-family: var(--font-display); font-weight: 600; font-size: 1.75rem; letter-spacing: 0.2em; margin-right: -0.2em; }
+.logo-apos { letter-spacing: 0.08em; }
+.logo-by { font-size: 0.5625rem; font-weight: 500; letter-spacing: 0.34em; margin-right: -0.34em; text-transform: uppercase; color: var(--muted); }
+.logo.is-compact .logo-name { font-size: 1.35rem; }
+.logo.is-light { color: var(--white); }
+.logo.is-light .logo-by { color: rgb(255 255 255 / 0.75); }
+@media (max-width: 63.99rem) { .logo-name { font-size: 1.35rem; letter-spacing: 0.16em; margin-right: -0.16em; } .logo-by { font-size: 0.5rem; } }
 }

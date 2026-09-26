@@ -5,19 +5,15 @@ import './ui.css'
 
 interface Base { label: string; hint?: ReactNode; error?: string | null; className?: string; optional?: boolean }
 
-function Wrap({ id, label, hint, error, className, optional, children, filled }: Base & { id: string; children: ReactNode; filled: boolean }) {
+function Wrap({ id, label, hint, error, className, optional, children }: Base & { id: string; children: ReactNode }) {
   return (
-    <div className={cx('field', error && 'has-error', filled && 'is-filled', className)}>
-      {children}
-      <label htmlFor={id} className="field-label">
-        {label}{optional && <span className="field-opt"> · optional</span>}
+    <div className={cx('fld', error && 'has-error', className)}>
+      <label htmlFor={id} className="fld-label">
+        {label}{optional && <span className="fld-opt"> (optional)</span>}
       </label>
-      <span className="field-line" aria-hidden="true" />
-      {error ? (
-        <p id={`${id}-msg`} className="field-msg is-error" role="alert">{error}</p>
-      ) : hint ? (
-        <p id={`${id}-msg`} className="field-msg">{hint}</p>
-      ) : null}
+      {children}
+      {error ? <p id={`${id}-msg`} className="fld-msg is-error" role="alert">{error}</p>
+        : hint ? <p id={`${id}-msg`} className="fld-msg">{hint}</p> : null}
     </div>
   )
 }
@@ -25,10 +21,9 @@ function Wrap({ id, label, hint, error, className, optional, children, filled }:
 export function Input({ label, hint, error, className, optional, ...rest }: Base & InputHTMLAttributes<HTMLInputElement>) {
   const gen = useId()
   const id = rest.id ?? gen
-  const filled = rest.value !== undefined && rest.value !== ''
   return (
-    <Wrap id={id} label={label} hint={hint} error={error} className={className} optional={optional} filled={filled || !!rest.placeholder}>
-      <input className="field-input" aria-invalid={!!error || undefined} aria-describedby={error || hint ? `${id}-msg` : undefined} {...rest} id={id} />
+    <Wrap id={id} label={label} hint={hint} error={error} className={className} optional={optional}>
+      <input className="fld-input" aria-invalid={!!error || undefined} aria-describedby={error || hint ? `${id}-msg` : undefined} {...rest} id={id} />
     </Wrap>
   )
 }
@@ -36,10 +31,9 @@ export function Input({ label, hint, error, className, optional, ...rest }: Base
 export function Textarea({ label, hint, error, className, optional, ...rest }: Base & TextareaHTMLAttributes<HTMLTextAreaElement>) {
   const gen = useId()
   const id = rest.id ?? gen
-  const filled = rest.value !== undefined && rest.value !== ''
   return (
-    <Wrap id={id} label={label} hint={hint} error={error} className={cx('field-area', className)} optional={optional} filled={filled || !!rest.placeholder}>
-      <textarea className="field-input" rows={3} aria-invalid={!!error || undefined} aria-describedby={error || hint ? `${id}-msg` : undefined} {...rest} id={id} />
+    <Wrap id={id} label={label} hint={hint} error={error} className={className} optional={optional}>
+      <textarea className="fld-input fld-area" rows={3} aria-invalid={!!error || undefined} aria-describedby={error || hint ? `${id}-msg` : undefined} {...rest} id={id} />
     </Wrap>
   )
 }
@@ -48,16 +42,18 @@ export function Select({ label, hint, error, className, optional, children, ...r
   const gen = useId()
   const id = rest.id ?? gen
   return (
-    <Wrap id={id} label={label} hint={hint} error={error} className={cx('field-select', className)} optional={optional} filled>
-      <select className="field-input" aria-invalid={!!error || undefined} aria-describedby={error || hint ? `${id}-msg` : undefined} {...rest} id={id}>
-        {children}
-      </select>
-      <Icon name="chevron" size={18} className="field-chev" />
+    <Wrap id={id} label={label} hint={hint} error={error} className={cx('fld-select', className)} optional={optional}>
+      <span className="fld-select-wrap">
+        <select className="fld-input" aria-invalid={!!error || undefined} aria-describedby={error || hint ? `${id}-msg` : undefined} {...rest} id={id}>
+          {children}
+        </select>
+        <Icon name="chevron" size={16} className="fld-chev" />
+      </span>
     </Wrap>
   )
 }
 
-/** Pill-style radio group (occasions, fit modes, quiz answers). */
+/** Tile-style radio group (fit options, stitching choice, quiz answers). */
 export function ChoiceGroup<T extends string>({
   legend, options, value, onChange, name, columns, hideLegend,
 }: {
@@ -67,11 +63,12 @@ export function ChoiceGroup<T extends string>({
 }) {
   return (
     <fieldset className="choice-group">
-      <legend className={hideLegend ? 'sr-only' : 'choice-legend'}>{legend}</legend>
+      <legend className={hideLegend ? 'sr-only' : 'fld-label'}>{legend}</legend>
       <div className="choice-grid" style={columns ? { gridTemplateColumns: `repeat(${columns}, minmax(0,1fr))` } : undefined}>
         {options.map((o) => (
           <label key={o.value} className={cx('choice', value === o.value && 'is-on', o.disabled && 'is-disabled')}>
             <input type="radio" name={name} value={o.value} checked={value === o.value} disabled={o.disabled} onChange={() => onChange(o.value)} />
+            <span className="choice-dot" aria-hidden="true" />
             <span className="choice-body">
               <span className="choice-label">{o.label}</span>
               {o.hint && <span className="choice-hint">{o.hint}</span>}

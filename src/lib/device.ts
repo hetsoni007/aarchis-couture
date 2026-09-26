@@ -1,4 +1,4 @@
-import { useEffect, useState, useSyncExternalStore } from 'react'
+import { useSyncExternalStore } from 'react'
 
 export type Tier = 'high' | 'mid' | 'low' | 'none'
 export interface Device {
@@ -87,30 +87,4 @@ export function useMedia(query: string) {
     () => matchMedia(query).matches,
     () => false,
   )
-}
-
-/**
- * True once the page has loaded and the main thread has gone quiet. 3D scenes wait for this,
- * so first paint and first input never compete with three.js parsing or shader compilation;
- * the art-directed poster covers the gap. Phones wait a little longer than desktops.
- */
-export function useIdleReady(extraMs?: number) {
-  const [ready, setReady] = useState(false)
-  useEffect(() => {
-    const d = detectDevice()
-    const extra = extraMs ?? (d.tier === 'high' ? 0 : 7000)
-    let t = 0, idle = 0
-    // on phones and mid/low tiers, the first touch, scroll or key press wakes the scene early
-    const wake = () => setReady(true)
-    const gestures = ['pointerdown', 'touchstart', 'keydown', 'wheel'] as const
-    if (d.tier !== 'high') gestures.forEach((g) => window.addEventListener(g, wake, { once: true, passive: true }))
-    const go = () => {
-      const ric = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback
-      const after = () => { t = window.setTimeout(() => setReady(true), extra) }
-      if (ric) idle = ric(after, { timeout: 2500 }); else after()
-    }
-    if (document.readyState === 'complete') go(); else window.addEventListener('load', go, { once: true })
-    return () => { clearTimeout(t); (window as Window & { cancelIdleCallback?: (n: number) => void }).cancelIdleCallback?.(idle); window.removeEventListener('load', go); gestures.forEach((g) => window.removeEventListener(g, wake)) }
-  }, [extraMs])
-  return ready
 }

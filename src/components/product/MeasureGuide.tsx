@@ -7,7 +7,7 @@ import './measure.css'
 
 interface FieldDef { id: string; label: string; how: string; min: number; max: number; required?: boolean; mark: ReactElement }
 
-const Z = 'var(--zari)'
+const Z = 'var(--accent)'
 const line = (d: string) => <path d={d} fill="none" stroke={Z} strokeWidth="2.2" strokeLinecap="round" />
 const ring = (cx: number, cy: number, rx: number, ry: number) => <ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill="none" stroke={Z} strokeWidth="2.2" />
 const vbar = (x: number, y1: number, y2: number) => (
@@ -39,7 +39,7 @@ const MEN: FieldDef[] = [
 ]
 export const FIELDS: Record<BodyKind, FieldDef[]> = { women: WOMEN, men: MEN }
 
-function Figure({ kind, active }: { kind: BodyKind; active: string }) {
+export function Figure({ kind, active }: { kind: BodyKind; active: string }) {
   const fields = FIELDS[kind]
   const body = kind === 'women'
     ? 'M90 18 C90 32 87 39 73 43 C61 46 53 49 51 59 C49 73 53 84 49 96 C46 110 58 128 64 140 C60 160 50 176 50 192 L22 400 L178 400 L150 192 C150 176 140 160 136 140 C142 128 154 110 151 96 C147 84 151 73 149 59 C147 49 139 46 127 43 C113 39 110 32 110 18 Z'
@@ -103,7 +103,7 @@ export function MeasureGuide({ kind, initial, onSaved, compact }: { kind: BodyKi
       <div className="mguide-fig">
         <Figure kind={kind} active={active} />
         <div className="mguide-how" aria-live="polite">
-          <p className="eyebrow plain">{act.label}</p>
+          <p className="t-label">{act.label}</p>
           <p>{act.how}</p>
         </div>
       </div>
@@ -123,7 +123,7 @@ export function MeasureGuide({ kind, initial, onSaved, compact }: { kind: BodyKi
             ))}
           </div>
         </div>
-        <p className="small muted mguide-progress"><span className="num">{filled}</span> of {fields.length} · the starred ones are all we need to begin; Archana confirms the rest on your video fitting.</p>
+        <p className="t-small t-muted mguide-progress"><span className="t-num">{filled}</span> of {fields.length} · the starred ones are all we need to begin; Archana confirms the rest on your video fitting.</p>
         <div className="mguide-fields">
           {fields.map((f) => (
             <label key={f.id} className={cx('mfield', active === f.id && 'is-active', errors[f.id] && tried && 'has-error')} onFocus={() => setActive(f.id)} onMouseEnter={() => setActive(f.id)}>
@@ -138,8 +138,31 @@ export function MeasureGuide({ kind, initial, onSaved, compact }: { kind: BodyKi
           ))}
         </div>
         <Button type="submit" block>{initial ? 'Save changes' : 'Save these measurements'}</Button>
-        <p className="small muted">Saved on this device only. Not sure about a number? Leave it — Archana measures with you on video before cutting.</p>
+        <p className="t-small t-muted">Saved on this device only. Not sure about a number? Leave it — Archana measures with you on video before cutting.</p>
       </form>
+    </div>
+  )
+}
+
+/** Read-only "how to measure" reference: tap a measurement to see where the tape goes. */
+export function MeasureHowTo({ kind }: { kind: BodyKind }) {
+  const fields = FIELDS[kind]
+  const [active, setActive] = useState(fields[0].id)
+  return (
+    <div className="howto">
+      <div className="howto-fig"><Figure kind={kind} active={active} /></div>
+      <ol role="list" className="howto-list">
+        {fields.map((f, i) => (
+          <li key={f.id}>
+            <button type="button" className={cx('howto-item', active === f.id && 'is-on')} aria-pressed={active === f.id}
+              onClick={() => setActive(f.id)} onMouseEnter={() => setActive(f.id)} onFocus={() => setActive(f.id)}>
+              <span className="howto-n">{String(i + 1).padStart(2, '0')}</span>
+              <span className="howto-t">{f.label}{f.required && <abbr title="needed to begin" aria-label="needed to begin">*</abbr>}</span>
+              <span className="howto-d">{f.how}</span>
+            </button>
+          </li>
+        ))}
+      </ol>
     </div>
   )
 }
