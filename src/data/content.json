@@ -1,0 +1,490 @@
+{
+ "_provenance": "Every string under a key ending in verbatim-checked sections was asserted against the live crawl of https://www.aarchisbyarchanasoni.com (2026-09-24). Keys under `original` are new editorial copy written for this build.",
+ "brand": {
+  "name": "Aarchi's by Archana Soni",
+  "short": "Aarchi's",
+  "founder": "Archana Soni",
+  "tagline": "Where Tradition Meets Trend",
+  "descriptor": "Custom Fashion Designer · Ahmedabad",
+  "footerLine": "Custom fashion designer, Ahmedabad. Where tradition meets trend.",
+  "schemaDescription": "Custom fashion designer in Ahmedabad — made-to-measure bridal lehengas, sarees, festive and baby-shower outfits, shipped worldwide.",
+  "areaServed": [
+   "India",
+   "United States",
+   "United Kingdom",
+   "Canada",
+   "Australia",
+   "United Arab Emirates"
+  ],
+  "languages": [
+   "en",
+   "hi",
+   "gu"
+  ]
+ },
+ "contact": {
+  "whatsappDisplay": "+91 98793 90731",
+  "whatsappE164": "919879390731",
+  "telephone": "+91-98793-90731",
+  "studio": "Ahmedabad, India",
+  "visits": "Visits by appointment",
+  "intro": "The fastest way to reach us is WhatsApp. Share what you're looking for and we'll help with availability, sizing or a custom commission.",
+  "social": {
+   "instagram": {
+    "url": "https://www.instagram.com/aarchis.byarchanasoni/",
+    "handle": "@aarchis.byarchanasoni"
+   },
+   "facebook": {
+    "url": "https://www.facebook.com/aarchis.byearchanasonii/"
+   },
+   "pinterest": {
+    "url": "https://in.pinterest.com/aarchisbyarchanasoni/"
+   },
+   "linkedin": {
+    "url": "https://in.linkedin.com/company/aarchi-s-by-archana-soni"
+   }
+  },
+  "notPublished": [
+   "email address",
+   "street address / locality",
+   "opening hours",
+   "typical reply time"
+  ]
+ },
+ "home": {
+  "hero": {
+   "eyebrow": "Custom Fashion Designer · Ahmedabad",
+   "title": "Where Tradition Meets Trend",
+   "lead": "Custom bridal lehengas, sarees and festive wear — designed and made to measure in Ahmedabad by Archana Soni, shipped worldwide."
+  },
+  "marquee": [
+   "Bridal Couture",
+   "Handcrafted Sarees",
+   "Dupattas & Odhnis",
+   "Festive & Navratri",
+   "Bespoke Tailoring",
+   "Baby Shower & Maternity"
+  ],
+  "campaign": {
+   "eyebrow": "The Campaign",
+   "title": "Signature stories",
+   "lead": "Our flagship pieces, shot detail by detail — swipe through the collection."
+  },
+  "edit": {
+   "eyebrow": "The Signature Edit",
+   "title": "Explore by occasion",
+   "lead": "Every piece is made to measure — laid out across the moments you dress for."
+  },
+  "studio": {
+   "eyebrow": "The Studio",
+   "title": "A label built on craft & care",
+   "paragraphs": [
+    "Founded by Archana Soni in Ahmedabad, Aarchi's crafts timeless designs that celebrate elegance and individuality — from bridal lehengas with zari, zardozi and khat work to handcrafted sarees and festive wear.",
+    "Every piece is made to measure and designed around you, blending traditional craftsmanship with a contemporary sensibility."
+   ]
+  },
+  "faq": {
+   "eyebrow": "Good to know",
+   "title": "Questions, answered",
+   "items": [
+    {
+     "q": "Do you make custom, made-to-measure outfits?",
+     "a": "Yes — every piece at Aarchi's is made to measure. Bridal lehengas, sarees, festive and Navratri wear, baby-shower and maternity outfits are designed around your measurements, and the colour, fabric and embroidery of any catalogue design can be customised."
+    },
+    {
+     "q": "Do you ship outside India — USA, UK, Canada, Australia, UAE?",
+     "a": "Yes, we ship worldwide. Many of our clients are NRI brides and families ordering custom Indian wedding and festive outfits from abroad. Share your requirement on WhatsApp (+91 98793 90731) and we'll guide you through measurements, fittings and delivery."
+    },
+    {
+     "q": "How do I order a custom bridal lehenga or saree?",
+     "a": "Browse the catalogue, pick a design you love or bring your own reference, and enquire on WhatsApp. Archana will discuss the design, fabric and budget with you, guide your measurements, and craft the piece in her Ahmedabad studio."
+    },
+    {
+     "q": "Can I change the colour or fabric of a catalogue design?",
+     "a": "Absolutely. Every design is a starting point — colours, fabrics, embroidery and silhouettes are tailored to you. Tell us what you'd like to change when you enquire."
+    },
+    {
+     "q": "Where is the studio located?",
+     "a": "The studio is in Ahmedabad, Gujarat — visits by appointment. Outstation and international clients are looked after end-to-end on WhatsApp."
+    }
+   ]
+  },
+  "localSeo": {
+   "eyebrow": "Ahmedabad",
+   "title": "Bridal wear designer in Ahmedabad",
+   "paragraphs": [
+    "If you're searching for a custom lehenga in Ahmedabad, this is where it's made. At Aarchi's, Archana Soni designs and tailors every piece to your measurements — bridal lehengas worked in zari, zardozi and khat, handcrafted sarees, and occasion wear that fits the way ready-made never quite does.",
+    "Come festival season, the studio turns to garba nights — as a Navratri chaniya choli designer, Archana crafts festive ensembles you can twirl in. And for the quieter celebrations, she's the baby shower outfit designer in Ahmedabad mums-to-be come back to. Studio visits by appointment; start the conversation on WhatsApp."
+   ]
+  },
+  "instagram": {
+   "eyebrow": "On Instagram",
+   "title": "Recent work, as it happens",
+   "items": [
+    {
+     "file": "scarlet-palace",
+     "folder": "editorial",
+     "alt": "Scarlet Royal bridal lehenga — recent work by Aarchi's on Instagram"
+    },
+    {
+     "file": "pastel-flatlay",
+     "folder": "editorial",
+     "alt": "Contemporary pastel bride flat-lay — recent work by Aarchi's on Instagram"
+    },
+    {
+     "file": "grace-courtyard",
+     "folder": "editorial",
+     "alt": "Scarlet Grace Anarkali in golden hour — recent work by Aarchi's on Instagram"
+    },
+    {
+     "file": "blush-bench",
+     "folder": "editorial",
+     "alt": "Blush pastel bridal lehenga at dusk — recent work by Aarchi's on Instagram"
+    },
+    {
+     "file": "elegance-drape",
+     "folder": "editorial",
+     "alt": "Rani-pink saree pallu detail — recent work by Aarchi's on Instagram"
+    },
+    {
+     "file": "pastel-palace",
+     "folder": "editorial",
+     "alt": "Heritage saree portrait — recent work by Aarchi's on Instagram"
+    }
+   ]
+  },
+  "finalCta": {
+   "eyebrow": "Visit the Studio",
+   "title": "Found something you love?",
+   "text": "Message us on WhatsApp to check availability, book a fitting, or commission a made-to-measure piece."
+  }
+ },
+ "categories": [
+  {
+   "key": "bridal",
+   "slug": "bridal-lehengas",
+   "label": "Bridal Lehengas",
+   "singular": "Bridal Lehenga",
+   "ambient": "gold-drape",
+   "intro": "Heirloom lehengas in zari, zardozi and khat work — crafted for the moment you've always pictured.",
+   "count": 21
+  },
+  {
+   "key": "saree",
+   "slug": "sarees",
+   "label": "Sarees",
+   "singular": "Saree",
+   "ambient": "ribbon",
+   "intro": "Silk, paithani and bandhej drapes, hand-finished and styled for every celebration.",
+   "count": 6
+  },
+  {
+   "key": "dupatta",
+   "slug": "dupattas",
+   "label": "Dupattas",
+   "singular": "Dupatta",
+   "ambient": "bandhani-bloom",
+   "intro": "Hand-worked gharchola, bandhej and net dupattas — the finishing layer for bridal and festive looks.",
+   "count": 3
+  },
+  {
+   "key": "dressmaterial",
+   "slug": "dress-material",
+   "label": "Dress Material",
+   "singular": "Dress Material",
+   "ambient": "woven-grid",
+   "intro": "Pure silk suit pieces with a matching dupatta — unstitched, and tailored to your measurements.",
+   "count": 5
+  },
+  {
+   "key": "ethnic",
+   "slug": "ethnic-festive",
+   "label": "Ethnic & Festive",
+   "singular": "Ethnic & Festive Wear",
+   "ambient": "colour-burst",
+   "intro": "Festive and Navratri ensembles that turn a little tradition into a statement.",
+   "count": 10
+  },
+  {
+   "key": "mens",
+   "slug": "mens-ethnic",
+   "label": "Men's Ethnic",
+   "singular": "Men's Ethnic Wear",
+   "ambient": "geometric",
+   "intro": "Sharp, regal ethnic wear for grooms and the men of the celebration.",
+   "count": 1
+  },
+  {
+   "key": "babyshower",
+   "slug": "baby-shower-maternity",
+   "label": "Baby Shower & Maternity",
+   "singular": "Baby Shower & Maternity",
+   "ambient": "pastel-bloom",
+   "intro": "Bespoke baby-shower and maternity outfits to make the mum-to-be glow.",
+   "count": 2
+  }
+ ],
+ "about": {
+  "eyebrow": "Our Story",
+  "title": "Meet Archana Soni",
+  "paragraphs": [
+   "Fashion has always been my passion, and I take pride in crafting timeless designs that celebrate elegance and individuality. Based in Ahmedabad, I specialise in creating outfits that make every occasion truly extraordinary.",
+   "From custom creations to signature styles — bridal lehengas with zari, zardozi and khat work, handcrafted sarees, festive and maternity wear — my goal is to bring your dream outfits to life. Let's redefine elegance together."
+  ],
+  "portraitAlt": "Archana Soni, founder of Aarchi's",
+  "services": [
+   {
+    "title": "Bridal & Couture",
+    "text": "Handcrafted bridal lehengas with zari, zardozi and khat work for your big day."
+   },
+   {
+    "title": "Sarees & Ethnic Wear",
+    "text": "Silk, paithani and bandhej drapes, festive and Navratri ensembles for every occasion."
+   },
+   {
+    "title": "Custom & Made to Measure",
+    "text": "Bespoke outfits designed around you — including baby-shower and maternity wear."
+   }
+  ],
+  "metaDescription": "Meet Archana Soni, custom fashion designer in Ahmedabad — bridal lehengas with zari, zardozi & khat work, handcrafted sarees, festive & maternity wear. Made to measure, shipped worldwide."
+ },
+ "howItWorks": {
+  "eyebrow": "The Process",
+  "title": "Made for you, step by step",
+  "lead": "Every Aarchi's piece is made to measure — here's exactly how a custom outfit comes to life, whether you're in Ahmedabad or across the world.",
+  "steps": [
+   {
+    "title": "Consultation on WhatsApp",
+    "text": "Tell us the occasion, your ideas and budget — share reference photos or pick a catalogue design as the starting point."
+   },
+   {
+    "title": "Design & fabric",
+    "text": "Archana works out the silhouette, fabrics, colours and embroidery with you, with photos and swatches shared on chat."
+   },
+   {
+    "title": "Measurements at home",
+    "text": "A video-guided measurement session on WhatsApp — all you need is a measuring tape and a helper."
+   },
+   {
+    "title": "Crafted in Ahmedabad",
+    "text": "Your outfit is cut, embroidered and finished at the studio, with progress photos as it comes together."
+   },
+   {
+    "title": "Fitting review",
+    "text": "You see the finished piece on photos and video before it ships — tweaks are agreed right there."
+   },
+   {
+    "title": "Delivered to your door",
+    "text": "Carefully packed and shipped — across India and worldwide."
+   }
+  ],
+  "faq": [
+   {
+    "q": "Do I need to visit the studio?",
+    "a": "No — the whole process runs on WhatsApp if you prefer: consultation, video-guided measurements, progress photos and a fitting review before shipping. Studio visits in Ahmedabad are welcome by appointment."
+   },
+   {
+    "q": "How are measurements taken remotely?",
+    "a": "On a short WhatsApp video call, Archana guides you through each measurement step by step. You need a measuring tape and ideally someone to help."
+   },
+   {
+    "q": "Can I customise a catalogue design?",
+    "a": "Yes — every catalogue piece is a starting point. Colours, fabrics, embroidery and silhouettes are tailored to you."
+   },
+   {
+    "q": "How is the price decided?",
+    "a": "Each piece is quoted individually based on fabric, hand-work and construction. Share your budget in the first chat and the design is worked around it."
+   }
+  ],
+  "metaDescription": "From a WhatsApp consultation to your door: how Aarchi's designs, measures, crafts and delivers made-to-measure Indian outfits from the Ahmedabad studio — locally and worldwide."
+ },
+ "nri": {
+  "eyebrow": "For NRI Brides",
+  "title": "Made in India, delivered worldwide",
+  "lead": "Custom Indian bridal outfits designed over WhatsApp, handcrafted in Ahmedabad, and shipped to the USA, UK, Canada, Australia and UAE — made to your measurements, not a size chart.",
+  "processEyebrow": "The Remote Process",
+  "processTitle": "Six steps, zero guesswork",
+  "facts": [
+   {
+    "label": "Typical timeline",
+    "value": "confirmed on enquiry — share your wedding date first"
+   },
+   {
+    "label": "Payment",
+    "value": "discussed and confirmed on WhatsApp before work begins"
+   }
+  ],
+  "otherCountries": "Canada · Australia · UAE — ask us",
+  "faq": [
+   {
+    "q": "Can I order a custom bridal lehenga from India to the USA or UK?",
+    "a": "Yes — that's exactly what we do. The consultation, design and measurements all happen on WhatsApp, the outfit is handcrafted in Ahmedabad, and it ships to your door in the USA, UK, Canada, Australia, UAE and beyond."
+   },
+   {
+    "q": "How do made-to-measure outfits work online?",
+    "a": "Measurements are taken on a video-guided WhatsApp call, and you review the finished outfit on photos and video before it ships — so nothing is left to chance."
+   },
+   {
+    "q": "What if it doesn't fit when it arrives?",
+    "a": "Made-to-measure cuts fit risk dramatically, and every piece is checked against your measurements before shipping. If something needs adjusting, message us and we'll guide the alteration with a local tailor."
+   },
+   {
+    "q": "Do you understand what NRI brides need?",
+    "a": "Many of our clients order from abroad for weddings in India or celebrations overseas. Timezone-friendly chats, clear progress photos and honest timelines are part of the service."
+   }
+  ],
+  "metaDescription": "Custom bridal lehengas and Indian wedding outfits for NRI brides — designed on WhatsApp, made to measure in Ahmedabad, shipped to the USA, UK, Canada, Australia and UAE.",
+  "countries": {
+   "usa": {
+    "name": "the USA",
+    "eyebrow": "NRI Brides · The USA",
+    "title": "From Ahmedabad to the USA",
+    "lead": "Custom bridal lehengas and Indian wedding outfits for NRI brides across the United States — designed together on WhatsApp despite the timezones, crafted in Ahmedabad, delivered to your door.",
+    "faq": [
+     {
+      "q": "How do I order a custom bridal lehenga from India to the USA?",
+      "a": "Start a WhatsApp chat with your date and ideas. Design and fabric choices happen on chat, measurements on a guided video call, and the finished lehenga ships from Ahmedabad to your US address."
+     },
+     {
+      "q": "Do you work across US timezones?",
+      "a": "Yes — chats are asynchronous by nature and calls are scheduled to suit EST to PST."
+     },
+     {
+      "q": "What about customs and duties in the US?",
+      "a": "Any applicable US import duties are confirmed with your quote before you commit, so there are no surprises at delivery."
+     },
+     {
+      "q": "Is made-to-measure safe to order online?",
+      "a": "Measurements are video-guided and the finished piece is reviewed on photos and video before shipping — a fitting, minus the flight."
+     }
+    ],
+    "metaDescription": "Order a custom bridal lehenga from India to the USA. Designed on WhatsApp, made to measure in Ahmedabad, shipped across the United States. For NRI brides who want it made right."
+   },
+   "uk": {
+    "name": "the UK",
+    "eyebrow": "NRI Brides · The UK",
+    "title": "From Ahmedabad to the UK",
+    "lead": "Custom bridal lehengas and Indian wedding outfits for brides across the United Kingdom — designed together on WhatsApp, handcrafted in Ahmedabad, delivered to your door.",
+    "faq": [
+     {
+      "q": "How do I order a custom bridal lehenga from India to the UK?",
+      "a": "Message us on WhatsApp with your date and ideas. Design and fabric choices happen on chat, measurements on a guided video call, and the finished lehenga ships from Ahmedabad to your UK address."
+     },
+     {
+      "q": "Do UK brides really order bridal wear from India?",
+      "a": "Constantly — made-to-measure from the source is often better made and better value than off-the-peg abroad, and it's genuinely yours."
+     },
+     {
+      "q": "What about UK customs and VAT?",
+      "a": "Any applicable UK import charges are confirmed with your quote before you commit, so there are no surprises at delivery."
+     },
+     {
+      "q": "Is made-to-measure safe to order online?",
+      "a": "Measurements are video-guided and the finished piece is reviewed on photos and video before shipping — a fitting, minus the flight."
+     }
+    ],
+    "metaDescription": "Order a custom bridal lehenga from India to the UK. Designed on WhatsApp, made to measure in Ahmedabad, shipped across the United Kingdom. For British-Indian brides who want it made right."
+   },
+   "practical": [
+    {
+     "label": "Shipping",
+     "value": "carrier, time and cost confirmed with your quote"
+    },
+    {
+     "label": "Bridal range",
+     "value": "quoted per design — share your budget in the first chat"
+    },
+    {
+     "label": "Payment",
+     "value": "discussed and confirmed on WhatsApp before work begins"
+    },
+    {
+     "label": "Typical timeline",
+     "value": "confirmed on enquiry — share your wedding date first"
+    }
+   ]
+  }
+ },
+ "navratri": {
+  "eyebrow": "Festive Edit · Ahmedabad",
+  "title": "Navratri, made to twirl",
+  "lead": "Custom chaniya cholis and festive ensembles for garba nights — designed and made to measure in Ahmedabad by Archana Soni. Nine nights deserve better than off-the-rack.",
+  "faq": [
+   {
+    "q": "Do you design custom chaniya cholis for Navratri?",
+    "a": "Yes — Navratri and garba-night ensembles are made to order at the Ahmedabad studio. Pick a design from the festive edit or bring a reference, and it's cut to your measurements with the colours and work you choose."
+   },
+   {
+    "q": "How early should I order before Navratri?",
+    "a": "The earlier the better — festive season slots fill fast. Message us on WhatsApp with your date and we'll confirm what's possible for your timeline."
+   },
+   {
+    "q": "Can I customise the colours or mirror work?",
+    "a": "Absolutely. Colours, fabrics, embroidery and mirror work are all tailored to you — every piece is a starting point."
+   },
+   {
+    "q": "I'm not in Ahmedabad — can you still make my Navratri outfit?",
+    "a": "Yes. Measurements are guided over WhatsApp video and finished outfits ship across India and worldwide."
+   }
+  ],
+  "metaDescription": "Custom Navratri chaniya cholis and garba-night festive wear, made to measure in Ahmedabad by Archana Soni. Choose a design, customise colours and mirror work, enquire on WhatsApp."
+ },
+ "contactPage": {
+  "eyebrow": "Get in touch",
+  "title": "Visit the studio",
+  "quizTitle": "Let's design your outfit",
+  "quizLead": "A 30-second style quiz — tap through and we'll pick it up on WhatsApp with ideas & a quote.",
+  "quiz": [
+   {
+    "key": "occasion",
+    "q": "What are you dressing for?",
+    "opts": [
+     "Wedding",
+     "Reception",
+     "Sangeet / Mehndi",
+     "Festive / Navratri",
+     "Baby shower",
+     "Everyday / Other"
+    ]
+   },
+   {
+    "key": "piece",
+    "q": "What piece do you have in mind?",
+    "opts": [
+     "Bridal lehenga",
+     "Saree",
+     "Anarkali / Gown",
+     "Men's ethnic",
+     "Baby-shower outfit",
+     "Not sure yet"
+    ]
+   },
+   {
+    "key": "timeline",
+    "q": "When do you need it by?",
+    "opts": [
+     "Within a month",
+     "1–3 months",
+     "3–6 months",
+     "Just exploring"
+    ]
+   },
+   {
+    "key": "location",
+    "q": "Where should we deliver? (we ship worldwide)",
+    "opts": [
+     "India",
+     "USA",
+     "UK",
+     "Elsewhere"
+    ]
+   }
+  ],
+  "metaDescription": "Enquire about custom bridal lehengas, sarees & festive outfits on WhatsApp (+91 98793 90731). Studio in Ahmedabad, visits by appointment — worldwide orders welcome."
+ },
+ "testimonials": {
+  "items": [],
+  "note": "The live site has no published testimonials (data/site.json holds TODO placeholders only). The section stays hidden until real, attributable client words are added here."
+ },
+ "catalogueLead": "Every piece is handcrafted and made to measure — browse by category, refine by occasion & style, then enquire to tailor it to you."
+}

@@ -1,0 +1,223 @@
+@import "tailwindcss";
+
+/* Self-hosted variable fonts (SIL OFL — licences in /fonts). Latin files are preloaded in index.html;
+   latin-ext only downloads when a page needs it (₹ lives there). */
+@font-face { font-family: "Bodoni Moda Variable"; font-style: normal; font-display: swap; font-weight: 400 900; src: url(/fonts/bodoni-moda-latin-opsz-normal.woff2) format("woff2-variations"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: "Bodoni Moda Variable"; font-style: normal; font-display: swap; font-weight: 400 900; src: url(/fonts/bodoni-moda-latin-ext-opsz-normal.woff2) format("woff2-variations"); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+@font-face { font-family: "Bodoni Moda Variable"; font-style: italic; font-display: swap; font-weight: 400 900; src: url(/fonts/bodoni-moda-latin-opsz-italic.woff2) format("woff2-variations"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: "Bodoni Moda Variable"; font-style: italic; font-display: swap; font-weight: 400 900; src: url(/fonts/bodoni-moda-latin-ext-opsz-italic.woff2) format("woff2-variations"); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+@font-face { font-family: "Jost Variable"; font-style: normal; font-display: swap; font-weight: 100 900; src: url(/fonts/jost-latin-wght-normal.woff2) format("woff2-variations"); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: "Jost Variable"; font-style: normal; font-display: swap; font-weight: 100 900; src: url(/fonts/jost-latin-ext-wght-normal.woff2) format("woff2-variations"); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+
+/* Tailwind is used for layout scaffolding only (flex/grid/gap/order/visibility).
+   Every visual — colour, type, surfaces, motion — lives in the tokens below. */
+@theme {
+  --breakpoint-xs: 26.875rem;   /* 430 */
+  --breakpoint-md: 48rem;       /* 768 */
+  --breakpoint-lg: 64rem;       /* 1024 */
+  --breakpoint-xl: 80rem;       /* 1280 */
+  --breakpoint-2xl: 90rem;      /* 1440 */
+  --breakpoint-3xl: 120rem;     /* 1920 */
+  --font-display: "Bodoni Moda Variable", "Bodoni 72", "Didot", Georgia, serif;
+  --font-sans: "Jost Variable", "Futura", "Avenir Next", system-ui, sans-serif;
+}
+
+:root {
+  /* palette — see BRAND.md §3 */
+  --kajal: #15110f;
+  --kajal-2: #211b18;
+  --kajal-3: #2d2622;
+  --khadi: #f4eee4;
+  --khadi-2: #eae1d2;
+  --khadi-3: #ddd2bf;
+  --sindoor: #a12f1d;
+  --sindoor-2: #7f2214;
+  --zari: #b8955a;
+  --zari-light: #dcc28e;
+  --zari-deep: #74561f;
+  --neel: #1e2940;
+  --mehndi: #4e5a35;
+  --gulabi: #c9788a;
+  --rakh: #5f564d;
+  --rakh-night: #a89c8e;
+
+  --ink: var(--kajal);
+  --ink-soft: var(--rakh);
+  --paper: var(--khadi);
+  --line: rgb(21 17 15 / 0.14);
+  --line-strong: rgb(21 17 15 / 0.32);
+
+  /* type — DESIGN.md §3 */
+  --fs-display: clamp(3.1rem, 1rem + 8.4vw, 10.5rem);
+  --fs-h1: clamp(2.35rem, 1.2rem + 4.6vw, 5.6rem);
+  --fs-h2: clamp(1.85rem, 1.15rem + 2.8vw, 3.6rem);
+  --fs-h3: clamp(1.3rem, 1.05rem + 1vw, 1.95rem);
+  --fs-lead: clamp(1.06rem, 0.98rem + 0.4vw, 1.35rem);
+  --fs-body: clamp(0.97rem, 0.94rem + 0.16vw, 1.07rem);
+  --fs-small: 0.875rem;
+  --fs-eyebrow: 0.72rem;
+
+  /* space — DESIGN.md §2 */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 24px;
+  --s-6: 32px; --s-7: 48px; --s-8: 64px; --s-9: 96px; --s-10: 128px;
+  --wrap: 1600px;
+  --gutter: clamp(16px, 1rem + 2.5vw, 56px);
+  --gap: clamp(12px, 0.5rem + 1.2vw, 28px);
+  --section: clamp(64px, 2rem + 8vw, 176px);
+  --nav-h: 72px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-io: cubic-bezier(0.65, 0, 0.35, 1);
+  --t-micro: 160ms;
+  --t-ui: 320ms;
+
+  color-scheme: light;
+}
+@media (max-width: 63.99rem) { :root { --nav-h: 60px; } }
+
+@layer base {
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(var(--nav-h) + 16px); }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: 1.6;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+  min-height: 100dvh;
+}
+img, svg, video, canvas { display: block; max-width: 100%; }
+img { height: auto; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: 0; padding: 0; }
+a { color: inherit; text-decoration: none; }
+p, h1, h2, h3, h4, figure, blockquote, ul, ol, dl, dd { margin: 0; }
+ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 450; text-wrap: balance; letter-spacing: -0.01em; }
+p { text-wrap: pretty; }
+::selection { background: var(--sindoor); color: var(--khadi); }
+
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--zari); outline-offset: 3px; border-radius: 2px; }
+.night :focus-visible { outline-color: var(--zari-light); }
+
+}
+
+@layer components {
+/* ── surfaces ─────────────────────────────────────────────── */
+.night {
+  --ink: var(--khadi);
+  --ink-soft: var(--rakh-night);
+  --paper: var(--kajal);
+  --line: rgb(244 238 228 / 0.14);
+  --line-strong: rgb(244 238 228 / 0.34);
+  background: var(--kajal);
+  color: var(--khadi);
+  color-scheme: dark;
+}
+.paper-2 { background: var(--khadi-2); }
+
+/* ── layout primitives ────────────────────────────────────── */
+.wrap {
+  width: 100%;
+  max-width: calc(var(--wrap) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: max(var(--gutter), env(safe-area-inset-left)) max(var(--gutter), env(safe-area-inset-right));
+}
+.section { padding-block: var(--section); position: relative; }
+.measure { max-width: 64ch; }
+.measure-lead { max-width: 48ch; }
+
+/* warp grid: 4 / 8 / 12 */
+.warp { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--gap); }
+@media (min-width: 48rem) { .warp { grid-template-columns: repeat(8, minmax(0, 1fr)); } }
+@media (min-width: 64rem) { .warp { grid-template-columns: repeat(12, minmax(0, 1fr)); } }
+
+/* visible warp threads behind a section */
+.warp-lines { position: relative; isolation: isolate; }
+.warp-lines::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  --cols: 4;
+  background-image: linear-gradient(to right, var(--line) 1px, transparent 1px);
+  background-size: calc((min(100%, var(--wrap) + 2 * var(--gutter)) - 2 * var(--gutter)) / var(--cols)) 100%;
+  background-position: max(var(--gutter), calc((100% - var(--wrap)) / 2)) 0;
+  opacity: 0.55;
+  mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+}
+@media (min-width: 48rem) { .warp-lines::before { --cols: 8; } }
+@media (min-width: 64rem) { .warp-lines::before { --cols: 12; } }
+
+/* ── type ─────────────────────────────────────────────────── */
+.display { font-family: var(--font-display); font-size: var(--fs-display); line-height: 0.92; font-weight: 420; letter-spacing: -0.025em; font-variation-settings: "opsz" 96; }
+.h1 { font-size: var(--fs-h1); line-height: 1; letter-spacing: -0.02em; font-variation-settings: "opsz" 96; }
+.h2 { font-size: var(--fs-h2); line-height: 1.04; letter-spacing: -0.015em; font-variation-settings: "opsz" 72; }
+.h3 { font-size: var(--fs-h3); line-height: 1.12; font-variation-settings: "opsz" 28; }
+.lead { font-size: var(--fs-lead); line-height: 1.5; color: var(--ink-soft); }
+.small { font-size: var(--fs-small); }
+.muted { color: var(--ink-soft); }
+.italic-voice { font-family: var(--font-display); font-style: italic; font-weight: 400; font-variation-settings: "opsz" 28; }
+em.v { font-family: var(--font-display); font-style: italic; font-weight: 400; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 0.75em;
+  font-family: var(--font-sans); font-size: var(--fs-eyebrow); font-weight: 500;
+  letter-spacing: 0.24em; text-transform: uppercase; color: var(--zari-deep);
+}
+.night .eyebrow { color: var(--zari-light); }
+.eyebrow::before { content: ""; width: 7px; height: 7px; transform: rotate(45deg); background: currentColor; flex: none; }
+.eyebrow.plain::before { display: none; }
+.num { font-variant-numeric: tabular-nums lining-nums; }
+
+.link-thread {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px; background-repeat: no-repeat; background-position: 0 100%;
+  transition: background-size var(--t-ui) var(--ease-out);
+  padding-bottom: 2px;
+}
+.link-thread:hover, .link-thread:focus-visible { background-size: 100% 1px; }
+.prose-link { text-decoration: underline; text-decoration-color: var(--zari); text-underline-offset: 0.22em; text-decoration-thickness: 1px; }
+.prose-link:hover { text-decoration-color: currentColor; }
+
+/* ── reveal: IntersectionObserver adds .is-in; the compositor does the rest ─── */
+.js [data-reveal] { opacity: 0; transform: translate3d(0, 28px, 0); transition: opacity 1s var(--ease-out) var(--rd, 0ms), transform 1.1s var(--ease-out) var(--rd, 0ms), clip-path 1.2s var(--ease-io) var(--rd, 0ms); }
+.js [data-reveal="left"] { transform: translate3d(-36px, 0, 0); }
+.js [data-reveal="right"] { transform: translate3d(36px, 0, 0); }
+.js [data-reveal="fade"] { transform: none; }
+.js [data-reveal="mask"] { opacity: 1; transform: none; clip-path: inset(100% 0 0 0); }
+.js [data-reveal].is-in { opacity: 1; transform: none; clip-path: inset(0 0 0 0); }
+.js.rm [data-reveal] { opacity: 1; transform: none; clip-path: none; transition: none; }
+/* above-the-fold entrances: pure CSS, staggered by position */
+.rise { animation: rise 1.1s var(--ease-out) both; }
+.rise:nth-child(2) { animation-delay: 70ms; } .rise:nth-child(3) { animation-delay: 140ms; } .rise:nth-child(4) { animation-delay: 210ms; } .rise:nth-child(5) { animation-delay: 280ms; }
+.rise:nth-child(6) { animation-delay: 350ms; } .rise:nth-child(7) { animation-delay: 420ms; } .rise:nth-child(8) { animation-delay: 490ms; } .rise:nth-child(n+9) { animation-delay: 560ms; }
+@keyframes rise { from { opacity: 0; transform: translate3d(0, 24px, 0); } }
+
+.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.skip-link { position: fixed; left: 12px; top: 12px; z-index: 100; padding: 12px 18px; background: var(--kajal); color: var(--khadi); transform: translateY(-160%); transition: transform var(--t-ui) var(--ease-out); }
+.skip-link:focus-visible { transform: none; }
+
+/* hide scrollbars on horizontal rails while keeping them scrollable */
+.rail { overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+.rail::-webkit-scrollbar { display: none; }
+.rail > * { scroll-snap-align: start; }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}
+
+/* custom cursor hides the system pointer only when it is actually running */
+html.has-cursor, html.has-cursor * { cursor: none !important; }
+html.has-cursor input, html.has-cursor textarea, html.has-cursor select { cursor: auto !important; }

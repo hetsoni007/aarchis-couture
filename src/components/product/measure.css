@@ -1,0 +1,34 @@
+@layer components {
+.mguide { display: grid; gap: 28px; }
+@media (min-width: 48rem) { .mguide { grid-template-columns: minmax(180px, 0.8fr) minmax(0, 1.2fr); align-items: start; } }
+.mguide-fig { position: sticky; top: 0; display: grid; gap: 14px; justify-items: center; padding: 18px; background: var(--khadi-2); }
+@media (max-width: 47.99rem) { .mguide-fig { position: relative; grid-template-columns: 110px 1fr; align-items: center; justify-items: start; } }
+.mfig { width: 100%; max-width: 200px; height: auto; }
+@media (max-width: 47.99rem) { .mfig { max-width: 110px; } }
+.mfig-body { fill: var(--khadi); stroke: var(--kajal); stroke-width: 1.2; }
+.mfig-arms { fill: none; stroke: var(--kajal); stroke-width: 1.2; stroke-linecap: round; opacity: 0.6; }
+.mfig-head { fill: none; stroke: var(--kajal); stroke-width: 1; opacity: 0.35; }
+.mfig-mark { opacity: 0; transition: opacity var(--t-ui); }
+.mfig-mark.is-on { opacity: 1; animation: mark-draw 900ms var(--ease-out); }
+@keyframes mark-draw { from { opacity: 0; transform: scale(0.96); transform-origin: center; } }
+.mguide-how { font-size: 0.92rem; line-height: 1.5; max-width: 34ch; min-height: 5.5em; }
+.mguide-how .eyebrow { margin-bottom: 4px; color: var(--zari-deep); }
+.mguide-form { display: grid; gap: 18px; }
+.mguide-top { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 16px; }
+.unit-toggle { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 999px; padding: 3px; }
+.unit-toggle button { min-width: 44px; min-height: 38px; border-radius: 999px; font-size: 0.82rem; letter-spacing: 0.08em; }
+.unit-toggle button.is-on { background: var(--kajal); color: var(--khadi); }
+.mguide-progress { margin-top: -4px; }
+.mguide-fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; }
+.mfield { display: grid; gap: 4px; padding: 10px 12px; border: 1px solid var(--line); cursor: text; transition: border-color var(--t-ui), background var(--t-ui); }
+.mfield.is-active { border-color: var(--zari); background: rgb(184 149 90 / 0.07); }
+.mfield.has-error { border-color: var(--sindoor); }
+.mfield-label { font-size: 0.74rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); }
+.mfield-label abbr { text-decoration: none; color: var(--sindoor); margin-left: 3px; }
+.mfield-in { display: flex; align-items: baseline; gap: 6px; }
+.mfield-in input { width: 100%; min-height: 40px; border: 0; background: transparent; font-size: 1.35rem; font-family: var(--font-display); font-variant-numeric: tabular-nums; }
+.mfield-in input:focus-visible { outline: none; }
+.mfield-unit { font-size: 0.8rem; color: var(--ink-soft); }
+.mfield-err { font-size: 0.78rem; color: var(--sindoor); line-height: 1.4; }
+.mguide.is-compact .mguide-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

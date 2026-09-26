@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#15110F" />
+    <!-- fix the cascade-layer order before any stylesheet loads, whatever order the bundler emits CSS in -->
+    <style>@layer properties, theme, base, components, utilities;</style>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="preload" href="/fonts/bodoni-moda-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/jost-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <title>Aarchi's by Archana Soni — Made-to-measure couture, Ahmedabad</title>
+    <meta name="description" content="Made-to-measure bridal lehengas, sarees, dupattas and festive wear, cut in Archana Soni's Ahmedabad studio and shipped worldwide." />
+    <meta property="og:site_name" content="Aarchi's by Archana Soni" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/og.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      // mark JS + motion preference before first paint (no flash of unstyled reveals)
+      document.documentElement.classList.add('js');
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('rm');
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <p style="padding:2rem;font-family:system-ui">Aarchi's by Archana Soni — made-to-measure couture from Ahmedabad. Please enable JavaScript, or message the studio on WhatsApp: +91 98793 90731.</p>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

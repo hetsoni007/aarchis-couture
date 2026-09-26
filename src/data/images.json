@@ -1,0 +1,858 @@
+{
+ "p/gharchola-heritage-dupatta": {
+  "w": 1080,
+  "h": 1152,
+  "ratio": 0.9375,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#6e442a"
+ },
+ "p/sunset-bandhani-ombre-dupatta": {
+  "w": 1080,
+  "h": 1152,
+  "ratio": 0.9375,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#aa5d46"
+ },
+ "p/scarlet-pearl-petal-dupatta": {
+  "w": 1080,
+  "h": 1152,
+  "ratio": 0.9375,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#943f2c"
+ },
+ "p/ivory-elegance-saree": {
+  "w": 1080,
+  "h": 1350,
+  "ratio": 0.8,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#4a333d"
+ },
+ "p/linen-silk-gamthi-saree": {
+  "w": 1080,
+  "h": 1351,
+  "ratio": 0.7994,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#8d8369"
+ },
+ "p/heritage-handcrafted-saree": {
+  "w": 1080,
+  "h": 1350,
+  "ratio": 0.8,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#624437"
+ },
+ "p/silk-saree-ethnic-set": {
+  "w": 1080,
+  "h": 1350,
+  "ratio": 0.8,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#694d40"
+ },
+ "p/beige-noor-saree": {
+  "w": 1080,
+  "h": 1350,
+  "ratio": 0.8,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#9f908f"
+ },
+ "p/beige-mirage-saree": {
+  "w": 1080,
+  "h": 1349,
+  "ratio": 0.8006,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#77674d"
+ },
+ "p/blush-pastel-bridal-lehenga": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#5d7d90"
+ },
+ "p/scarlet-royal-bridal-lehenga": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#8d7850"
+ },
+ "p/nazaakat-beige-pink-lehenga": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#233640"
+ },
+ "p/twirl-couture-lehenga": {
+  "w": 1080,
+  "h": 1350,
+  "ratio": 0.8,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#928a78"
+ },
+ "p/pastel-dreams-d-day-lehenga": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#967362"
+ },
+ "p/fiery-red-bridal-ensemble": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#8b7750"
+ },
+ "p/white-beaded-grace-ensemble": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#bf9484"
+ },
+ "p/contemporary-pastel-bride": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#a6816f"
+ },
+ "p/scarlet-sonnet-lehenga": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#a55f4b"
+ },
+ "p/maroon-ode-lehenga": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#aa7d6b"
+ },
+ "p/coral-elan-lehenga": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#a36b59"
+ },
+ "p/scarlet-mirage-ensemble": {
+  "w": 1016,
+  "h": 729,
+  "ratio": 1.3937,
+  "widths": [
+   360,
+   640,
+   800,
+   1016
+  ],
+  "tone": "#957762"
+ },
+ "p/ivory-reign-lehenga": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#cc8d77"
+ },
+ "p/blush-petal-lehenga": {
+  "w": 664,
+  "h": 1010,
+  "ratio": 0.6574,
+  "widths": [
+   360,
+   640,
+   664
+  ],
+  "tone": "#b2ada8"
+ },
+ "p/emerald-ember-lehenga": {
+  "w": 572,
+  "h": 958,
+  "ratio": 0.5971,
+  "widths": [
+   360,
+   572
+  ],
+  "tone": "#c9989e"
+ },
+ "p/golden-halo-lehenga": {
+  "w": 616,
+  "h": 988,
+  "ratio": 0.6235,
+  "widths": [
+   360,
+   616
+  ],
+  "tone": "#ccc1bd"
+ },
+ "p/coral-saga-lehenga": {
+  "w": 492,
+  "h": 945,
+  "ratio": 0.5206,
+  "widths": [
+   360,
+   492
+  ],
+  "tone": "#cfb299"
+ },
+ "p/golden-sonnet-lehenga": {
+  "w": 443,
+  "h": 956,
+  "ratio": 0.4634,
+  "widths": [
+   360,
+   443
+  ],
+  "tone": "#aa9c9c"
+ },
+ "p/coral-grace-lehenga": {
+  "w": 1080,
+  "h": 1349,
+  "ratio": 0.8006,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#574836"
+ },
+ "p/onyx-soir-e-lehenga": {
+  "w": 1080,
+  "h": 1349,
+  "ratio": 0.8006,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#54482f"
+ },
+ "p/emerald-ember-ensemble": {
+  "w": 1080,
+  "h": 1350,
+  "ratio": 0.8,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#70523c"
+ },
+ "p/sangeet-special-anarkali": {
+  "w": 1080,
+  "h": 1205,
+  "ratio": 0.8963,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#876444"
+ },
+ "p/multicoloured-patchwork-dress": {
+  "w": 1080,
+  "h": 1214,
+  "ratio": 0.8896,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#8b7f63"
+ },
+ "p/scarlet-grace-anarkali": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#b99884"
+ },
+ "p/scarlet-soiree-ensemble": {
+  "w": 789,
+  "h": 907,
+  "ratio": 0.8699,
+  "widths": [
+   360,
+   640,
+   789
+  ],
+  "tone": "#866c5a"
+ },
+ "p/rose-aria-ensemble": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#6c5052"
+ },
+ "p/sapphire-bahaar-ensemble": {
+  "w": 481,
+  "h": 805,
+  "ratio": 0.5975,
+  "widths": [
+   360,
+   481
+  ],
+  "tone": "#b08b83"
+ },
+ "p/scarlet-muse-ensemble": {
+  "w": 443,
+  "h": 956,
+  "ratio": 0.4634,
+  "widths": [
+   360,
+   443
+  ],
+  "tone": "#aea8a2"
+ },
+ "p/rose-whisper-ensemble": {
+  "w": 443,
+  "h": 956,
+  "ratio": 0.4634,
+  "widths": [
+   360,
+   443
+  ],
+  "tone": "#7a6a65"
+ },
+ "p/scarlet-grace-ensemble": {
+  "w": 367,
+  "h": 740,
+  "ratio": 0.4959,
+  "widths": [
+   360,
+   367
+  ],
+  "tone": "#8e8677"
+ },
+ "p/lavender-verve-dress": {
+  "w": 616,
+  "h": 854,
+  "ratio": 0.7213,
+  "widths": [
+   360,
+   616
+  ],
+  "tone": "#83535a"
+ },
+ "p/coral-turquoise-men-s-ensemble": {
+  "w": 1080,
+  "h": 1350,
+  "ratio": 0.8,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#d5c1c4"
+ },
+ "p/motherhood-baby-shower-ensemble": {
+  "w": 1080,
+  "h": 1350,
+  "ratio": 0.8,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#bfbcbc"
+ },
+ "p/blossom-baby-shower-outfit": {
+  "w": 1080,
+  "h": 1350,
+  "ratio": 0.8,
+  "widths": [
+   360,
+   640,
+   800,
+   1080
+  ],
+  "tone": "#a4979c"
+ },
+ "p/noir-vine-embroidered-silk-suit": {
+  "w": 937,
+  "h": 1250,
+  "ratio": 0.7496,
+  "widths": [
+   360,
+   640,
+   800,
+   937
+  ],
+  "tone": "#8b6b49"
+ },
+ "p/mahogany-stag-jacquard-silk-suit": {
+  "w": 937,
+  "h": 1250,
+  "ratio": 0.7496,
+  "widths": [
+   360,
+   640,
+   800,
+   937
+  ],
+  "tone": "#8c6d4a"
+ },
+ "p/magenta-zari-stripe-silk-suit": {
+  "w": 937,
+  "h": 1250,
+  "ratio": 0.7496,
+  "widths": [
+   360,
+   640,
+   800,
+   937
+  ],
+  "tone": "#946448"
+ },
+ "p/olive-floral-jaal-silk-suit": {
+  "w": 937,
+  "h": 1250,
+  "ratio": 0.7496,
+  "widths": [
+   360,
+   640,
+   800,
+   937
+  ],
+  "tone": "#9d7842"
+ },
+ "p/ice-blue-floral-jaal-silk-suit": {
+  "w": 937,
+  "h": 1250,
+  "ratio": 0.7496,
+  "widths": [
+   360,
+   640,
+   800,
+   937
+  ],
+  "tone": "#9b7750"
+ },
+ "e/blush-bench": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#a17960"
+ },
+ "e/blush-courtyard": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#ad856b"
+ },
+ "e/blush-flatlay": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#61422f"
+ },
+ "e/blush-look": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#ccbeb4"
+ },
+ "e/elegance-drape": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#916045"
+ },
+ "e/elegance-flatlay": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#ba8d71"
+ },
+ "e/elegance-portrait": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#97654e"
+ },
+ "e/grace-courtyard": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#9e664d"
+ },
+ "e/grace-flatlay": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#673930"
+ },
+ "e/grace-jharokha": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#7e4a34"
+ },
+ "e/grace-look": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#d0b4ad"
+ },
+ "e/pastel-flatlay": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#7a6447"
+ },
+ "e/pastel-look": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#d1cabe"
+ },
+ "e/pastel-palace": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#9a7449"
+ },
+ "e/pastel-silhouette": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#d0d5cd"
+ },
+ "e/scarlet-craft": {
+  "w": 562,
+  "h": 1000,
+  "ratio": 0.562,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#412013"
+ },
+ "e/scarlet-jewels": {
+  "w": 562,
+  "h": 1000,
+  "ratio": 0.562,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#7c7a71"
+ },
+ "e/scarlet-palace": {
+  "w": 562,
+  "h": 1000,
+  "ratio": 0.562,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#784829"
+ },
+ "e/scarlet-story": {
+  "w": 562,
+  "h": 1000,
+  "ratio": 0.562,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#8d6e67"
+ },
+ "e/sunset-flatlay": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#cc957a"
+ },
+ "e/sunset-look": {
+  "w": 563,
+  "h": 1000,
+  "ratio": 0.563,
+  "widths": [
+   360,
+   560
+  ],
+  "tone": "#d0a69b"
+ },
+ "s/founder-portrait": {
+  "w": 843,
+  "h": 648,
+  "ratio": 1.3009,
+  "widths": [
+   480,
+   843
+  ],
+  "tone": "#726155"
+ },
+ "s/founder-archana": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   480,
+   960
+  ],
+  "tone": "#61544a"
+ },
+ "s/story-lehenga": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   480,
+   960
+  ],
+  "tone": "#8d7850"
+ },
+ "s/bridal-lehengas": {
+  "w": 1080,
+  "h": 1080,
+  "ratio": 1.0,
+  "widths": [
+   480,
+   960
+  ],
+  "tone": "#5d7d90"
+ },
+ "s/sarees": {
+  "w": 1080,
+  "h": 1350,
+  "ratio": 0.8,
+  "widths": [
+   480,
+   960
+  ],
+  "tone": "#4a333d"
+ },
+ "s/ethnic-festive": {
+  "w": 1080,
+  "h": 1350,
+  "ratio": 0.8,
+  "widths": [
+   480,
+   960
+  ],
+  "tone": "#4a3c3b"
+ },
+ "s/mens-ethnic": {
+  "w": 1080,
+  "h": 1350,
+  "ratio": 0.8,
+  "widths": [
+   480,
+   960
+  ],
+  "tone": "#d5c1c4"
+ },
+ "s/baby-shower": {
+  "w": 1080,
+  "h": 1350,
+  "ratio": 0.8,
+  "widths": [
+   480,
+   960
+  ],
+  "tone": "#bfbcbc"
+ },
+ "s/custom-couture": {
+  "w": 1080,
+  "h": 1350,
+  "ratio": 0.8,
+  "widths": [
+   480,
+   960
+  ],
+  "tone": "#e4cfb3"
+ }
+}

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /bag
+Disallow: /checkout
+Disallow: /reserved/
+Disallow: /account
+Disallow: /wishlist
+
+Sitemap: https://www.aarchisbyarchanasoni.com/sitemap.xml

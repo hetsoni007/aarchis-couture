@@ -1,0 +1,14 @@
+{
+  "name": "Aarchi's by Archana Soni",
+  "short_name": "Aarchi's",
+  "description": "Made-to-measure bridal and festive couture from Ahmedabad.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F4EEE4",
+  "theme_color": "#15110F",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
