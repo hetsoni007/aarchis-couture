@@ -2,18 +2,14 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { safeStorage } from './persist'
 import type { BagItem } from './bag'
-import type { MeasureProfile } from './measurements'
 
-export interface ReservationLine extends BagItem { name: string; priceINR: number; indicative: boolean; profile?: MeasureProfile }
+export interface OrderLine extends BagItem { name: string; priceINR: number; indicative: boolean }
 export interface Contact {
-  name: string; phone: string; email: string; country: string; city: string; address: string; postcode: string; eventDate: string; occasion: string
+  name: string; phone: string; email: string; country: string; city: string; address: string; postcode: string
 }
-export interface Reservation { ref: string; createdAt: number; lines: ReservationLine[]; contact: Contact; indicativeTotal: number; hasIndicative: boolean }
+export interface Order { ref: string; createdAt: number; lines: OrderLine[]; contact: Contact; total: number; hasIndicative: boolean }
 
-/** The studio's real six steps (How it works), plus "Reserved" in front. */
-export const JOURNEY = ['Reserved', 'Consultation on WhatsApp', 'Design & fabric', 'Measurements', 'Crafted in Ahmedabad', 'Fitting review', 'Delivered to your door'] as const
-
-interface OrdersState { reservations: Reservation[]; add: (r: Omit<Reservation, 'ref' | 'createdAt'>) => Reservation }
+interface OrdersState { orders: Order[]; add: (r: Omit<Order, 'ref' | 'createdAt'>) => Order }
 
 const makeRef = () => {
   const a = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
@@ -24,13 +20,13 @@ const makeRef = () => {
 export const useOrders = create<OrdersState>()(
   persist(
     (set, get) => ({
-      reservations: [],
+      orders: [],
       add: (r) => {
-        const res: Reservation = { ...r, ref: makeRef(), createdAt: Date.now() }
-        set({ reservations: [res, ...get().reservations] })
-        return res
+        const order: Order = { ...r, ref: makeRef(), createdAt: Date.now() }
+        set({ orders: [order, ...get().orders] })
+        return order
       },
     }),
-    { name: 'aarchis-reservations', storage: safeStorage, skipHydration: true, version: 1 },
+    { name: 'aarchis-orders', storage: safeStorage, skipHydration: true, version: 2 },
   ),
 )

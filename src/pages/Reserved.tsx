@@ -2,10 +2,9 @@ import { useParams } from 'react-router-dom'
 import { Seo } from '../lib/seo'
 import { getProduct } from '../lib/catalog'
 import { formatINR } from '../lib/format'
-import { waLink } from '../lib/whatsapp'
-import { useOrders, JOURNEY, type Reservation } from '../store/orders'
+import { waLink, studioOrderLink, customerOrderLink } from '../lib/whatsapp'
+import { useOrders } from '../store/orders'
 import { useUi } from '../store/ui'
-import { describeCustom } from '../components/product/customLabels'
 import { Button } from '../components/ui/Button'
 import { EmptyState } from '../components/ui/EmptyState'
 import { Img } from '../components/ui/Img'
@@ -13,79 +12,52 @@ import { Icon } from '../components/ui/Icon'
 import { PageLoader } from '../components/ui/Kit'
 import './checkout.css'
 
-export function briefFor(r: Reservation) {
-  const lines = r.lines.map((l) => {
-    const p = getProduct(l.slug)!
-    const m = l.profile ? `\n  Measurements (${l.profile.name}, cm): ${Object.entries(l.profile.values).map(([k, v]) => `${k} ${v}`).join(', ')}` : ''
-    return `• ${l.name} ×${l.qty} — ${describeCustom(p, l.custom).join(', ')}${m}${l.custom.notes ? `\n  Notes: ${l.custom.notes}` : ''}`
-  }).join('\n')
-  const c = r.contact
-  const when = [c.occasion, c.eventDate && new Date(c.eventDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })].filter(Boolean).join(' · ')
-  return `Namaste Archana — I've just reserved on aarchisbyarchanasoni.com.
-Reference: ${r.ref}
-
-${lines}
-
-Deliver to: ${c.city}, ${c.country}${when ? `\nOccasion: ${when}` : ''}
-${r.hasIndicative ? 'Indicative total' : 'Total'}: ${formatINR(r.indicativeTotal)}
-${c.name} · ${c.phone}${c.email ? ` · ${c.email}` : ''}`
-}
-
-export function Journey({ compact }: { compact?: boolean }) {
-  return (
-    <ol role="list" className={compact ? 'journey is-compact' : 'journey'} aria-label="Making progress">
-      {JOURNEY.map((s, i) => (
-        <li key={s} className={i === 0 ? 'is-done' : i === 1 ? 'is-next' : ''}>
-          <span className="journey-dot" aria-hidden="true">{i === 0 && <Icon name="check" size={12} />}</span>
-          <span className="journey-t">{s}</span>
-          {!compact && i === 0 && <span className="journey-tag">Done</span>}
-          {!compact && i === 1 && <span className="journey-tag is-next">Next: send your brief</span>}
-        </li>
-      ))}
-    </ol>
-  )
-}
-
 export default function Reserved() {
   const { ref } = useParams()
-  const r = useOrders((s) => s.reservations.find((x) => x.ref === ref))
+  const order = useOrders((s) => s.orders.find((x) => x.ref === ref))
   const hydrated = useUi((s) => s.hydrated)
   if (!hydrated) return <PageLoader />
-  if (!r) {
+  if (!order) {
     return (
       <div className="container co-empty">
-        <Seo title="Reservation" description="Your reservation with Aarchi's by Archana Soni." noindex />
-        <EmptyState as="h1" kind="lost" title="We can’t find that reservation on this device"
-          actions={<><Button to="/account">Your reservations</Button><Button href={waLink(`Namaste — I'm looking for my reservation ${ref ?? ''}.`)} variant="secondary" icon="whatsapp">Ask the studio</Button></>}>
-          Reservations are kept in the browser you made them in. The studio has every brief you sent on WhatsApp.
+        <Seo title="Order" description="Your order with Aarchi's by Archana Soni." noindex />
+        <EmptyState as="h1" kind="lost" title="We can't find that order on this device"
+          actions={<><Button to="/account">Your orders</Button><Button href={waLink(`Namaste — I'm looking for my order ${ref ?? ''}.`)} variant="secondary" icon="whatsapp">Ask the studio</Button></>}>
+          Orders are kept in the browser you placed them in. Contact us on WhatsApp for help.
         </EmptyState>
       </div>
     )
   }
-  const firstName = r.contact.name.split(' ')[0]
+  const firstName = order.contact.name.split(' ')[0]
   return (
     <div className="rsv">
-      <Seo title={`Reserved — ${r.ref}`} description="Your pieces are reserved with Aarchi's by Archana Soni." noindex />
+      <Seo title={`Order confirmed — ${order.ref}`} description="Your order with Aarchi's by Archana Soni has been placed." noindex />
       <div className="container rsv-grid">
         <section className="rsv-main" aria-labelledby="rsv-title">
           <span className="rsv-check" aria-hidden="true"><Icon name="check" size={28} /></span>
-          <p className="t-label t-muted">Reference <span className="t-num">{r.ref}</span></p>
-          <h1 id="rsv-title" className="t-h1">Thank you, {firstName}. Your {r.lines.length === 1 ? 'piece is' : 'pieces are'} reserved.</h1>
-          <p className="t-lead">Nothing has been charged. One last step: send your brief to Archana on WhatsApp so she can confirm your final quote, deposit and timeline.</p>
+          <p className="t-label t-muted">Order <span className="t-num">{order.ref}</span></p>
+          <h1 id="rsv-title" className="t-h1">Thank you, {firstName}! Your order has been placed.</h1>
+          <p className="t-lead">Order notifications have been sent on WhatsApp. If they didn't open automatically, you can send them manually below.</p>
           <div className="rsv-cta">
-            <Button href={waLink(briefFor(r))} size="lg" icon="whatsapp">Send your brief to Archana</Button>
-            <Button to="/account" variant="secondary" size="lg">View in your account</Button>
+            <Button href={studioOrderLink(order)} size="lg" icon="whatsapp">Send order to studio</Button>
+            <Button href={customerOrderLink(order)} variant="secondary" size="lg" icon="whatsapp">Send your confirmation</Button>
           </div>
-          <p className="t-small t-muted">One tap opens WhatsApp with everything filled in: pieces, fit, measurements and delivery.</p>
           <div className="rsv-next">
             <h2 className="t-label">What happens next</h2>
-            <Journey />
+            <ol role="list" className="journey">
+              <li className="is-done"><span className="journey-dot" aria-hidden="true"><Icon name="check" size={12} /></span><span className="journey-t">Order placed</span><span className="journey-tag">Done</span></li>
+              <li className="is-next"><span className="journey-dot" aria-hidden="true" /><span className="journey-t">Order confirmed by studio</span><span className="journey-tag is-next">Next</span></li>
+              <li><span className="journey-dot" aria-hidden="true" /><span className="journey-t">Crafted in Ahmedabad</span></li>
+              <li><span className="journey-dot" aria-hidden="true" /><span className="journey-t">Shipped to you</span></li>
+              <li><span className="journey-dot" aria-hidden="true" /><span className="journey-t">Delivered to your door</span></li>
+            </ol>
           </div>
+          <Button to="/shop" variant="secondary">Continue shopping</Button>
         </section>
-        <aside className="rsv-side" aria-label="Your reservation">
-          <h2 className="t-label">Your reservation</h2>
+        <aside className="rsv-side" aria-label="Your order">
+          <h2 className="t-label">Your order</h2>
           <ul role="list" className="os-lines">
-            {r.lines.map((l) => {
+            {order.lines.map((l) => {
               const p = getProduct(l.slug)!
               return (
                 <li key={l.id} className="os-line">
@@ -93,19 +65,18 @@ export default function Reserved() {
                     <Img folder="p" name={p.image.file} alt="" sizes="64px" ratio={3 / 4} fit={p.image.fit} focus={p.image.focus} />
                     <span className="os-qty t-num">{l.qty}</span>
                   </span>
-                  <span className="os-body"><span className="os-name">{l.name}</span><span className="t-small t-muted">{describeCustom(p, l.custom).join(' · ')}</span></span>
+                  <span className="os-body"><span className="os-name">{l.name}</span><span className="t-small t-muted">{p.categoryLabel}</span></span>
                   <span className="t-num os-price">{formatINR(l.priceINR * l.qty)}</span>
                 </li>
               )
             })}
           </ul>
           <dl className="totals-rows">
-            <div><dt>Payment today</dt><dd className="t-num">{formatINR(0)}</dd></div>
-            <div className="totals-total"><dt>{r.hasIndicative ? 'Indicative total' : 'Total'}</dt><dd className="t-num">{formatINR(r.indicativeTotal)}</dd></div>
+            <div className="totals-total"><dt>{order.hasIndicative ? 'Indicative total' : 'Total'}</dt><dd className="t-num">{formatINR(order.total)}</dd></div>
           </dl>
           <div className="rsv-ship">
             <p className="t-label t-muted">Delivering to</p>
-            <p className="t-small">{r.contact.name}<br />{r.contact.address}<br />{r.contact.city} {r.contact.postcode}, {r.contact.country}</p>
+            <p className="t-small">{order.contact.name}<br />{order.contact.address}<br />{order.contact.city} {order.contact.postcode}, {order.contact.country}</p>
           </div>
         </aside>
       </div>

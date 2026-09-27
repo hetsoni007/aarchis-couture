@@ -40,7 +40,7 @@ function CheckoutHeader() {
       <div className="container co-hdr-in">
         <Link to="/bag" className="co-hdr-back" aria-label="Back to bag"><Icon name="arrowL" size={16} /> <span className="hidden sm:inline" aria-hidden="true">Back to bag</span></Link>
         <Link to="/" className="co-hdr-logo"><Logo compact /></Link>
-        <span className="co-hdr-secure"><Icon name="shield" size={16} /> <span className="hidden sm:inline">Secure reservation</span></span>
+        <span className="co-hdr-secure"><Icon name="shield" size={16} /> <span className="hidden sm:inline">Secure checkout</span></span>
       </div>
     </header>
   )

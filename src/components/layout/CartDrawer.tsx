@@ -53,7 +53,7 @@ export function CartDrawer() {
       footer={items.length ? (
         <div className="cart-foot">
           <div className="cart-row"><span>Subtotal</span><span className="t-num">{formatINR(bagTotal(items))}</span></div>
-          <p className="t-small t-muted">{bagHasIndicative(items) ? 'Includes indicative starting prices. ' : ''}Shipping and your final quote are confirmed with Archana — nothing is charged when you reserve.</p>
+          <p className="t-small t-muted">{bagHasIndicative(items) ? 'Includes indicative starting prices. ' : ''}Shipping calculated at checkout.</p>
           <Button to="/checkout" block onClick={() => setBag(false)}>Checkout</Button>
           <Button to="/bag" variant="secondary" block onClick={() => setBag(false)}>View bag</Button>
         </div>

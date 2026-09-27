@@ -16,7 +16,7 @@ import './layout.css'
 const MESSAGES = [
   { text: 'Made to measure in Ahmedabad · Shipped worldwide' },
   { text: 'Book a video consultation with Archana', href: askStylist('booking a video consultation') },
-  { text: 'Reserve today — no payment until your quote is confirmed', to: '/how-it-works' },
+  { text: 'Order today — handcrafted and shipped worldwide', to: '/how-it-works' },
 ]
 
 export function AnnouncementBar() {
