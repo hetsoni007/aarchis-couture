@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Seo } from '../lib/seo'
 import { getProduct, productUrl } from '../lib/catalog'
 import { formatINR } from '../lib/format'
-import { studioOrderLink, customerOrderLink } from '../lib/whatsapp'
+import { studioOrderLink, customerOrderLink, customerEmailLink } from '../lib/whatsapp'
 import { useBag, bagTotal, bagHasIndicative } from '../store/bag'
 import { useOrders, type Contact } from '../store/orders'
 import { useUi } from '../store/ui'
@@ -122,10 +122,9 @@ export default function Checkout() {
       }),
       contact, total: bagTotal(items), hasIndicative: bagHasIndicative(items),
     })
-    // Open WhatsApp to notify the studio
     window.open(studioOrderLink(order), '_blank')
-    // Open WhatsApp to notify the customer
     setTimeout(() => window.open(customerOrderLink(order), '_blank'), 500)
+    if (order.contact.email) setTimeout(() => window.open(customerEmailLink(order), '_blank'), 1000)
     setTimeout(() => {
       navigate(`/reserved/${order.ref}`, { replace: true })
       clear()
@@ -176,7 +175,7 @@ export default function Checkout() {
               <Link to="/bag" className="co-back"><Icon name="chevronL" size={14} /> Back to bag</Link>
               <Button size="lg" onClick={placeOrder} busy={busy}>Place order</Button>
             </div>
-            <p className="co-foot t-small t-muted"><Icon name="whatsapp" size={14} /> Order confirmation will be sent to you and the studio on WhatsApp.</p>
+            <p className="co-foot t-small t-muted"><Icon name="whatsapp" size={14} /> Order confirmation sent to you and the studio on WhatsApp &amp; email.</p>
           </div>
         </section>
         <aside className="co-side" aria-label="Order summary">

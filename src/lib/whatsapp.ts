@@ -52,3 +52,38 @@ We'll be in touch shortly to confirm your order details. For any questions, reac
 
 export const studioOrderLink = (order: Order) => waLink(orderMessageForStudio(order))
 export const customerOrderLink = (order: Order) => waLinkTo(order.contact.phone, orderMessageForCustomer(order))
+
+export function customerEmailLink(order: Order) {
+  const items = order.lines.map((l) => `  • ${l.name} ×${l.qty} — ${formatINR(l.priceINR * l.qty)}`).join('\n')
+  const body = `Order Confirmed — ${order.ref}
+
+Thank you for ordering from Aarchi's by Archana Soni!
+
+${items}
+
+${order.hasIndicative ? 'Indicative total' : 'Total'}: ${formatINR(order.total)}
+
+Shipping to: ${order.contact.address}, ${order.contact.city} ${order.contact.postcode}, ${order.contact.country}
+
+We'll be in touch shortly to confirm your order details.
+For any questions, reach us on WhatsApp at +91 98793 90731.
+
+— Aarchi's by Archana Soni
+aarchisbyarchanasoni.com`
+  return `mailto:${encodeURIComponent(order.contact.email)}?subject=${encodeURIComponent(`Order Confirmed — ${order.ref} | Aarchi's by Archana Soni`)}&body=${encodeURIComponent(body)}`
+}
+
+export function studioEmailLink(order: Order) {
+  const items = order.lines.map((l) => `  • ${l.name} ×${l.qty} — ${formatINR(l.priceINR * l.qty)}`).join('\n')
+  const c = order.contact
+  const body = `New Order — ${order.ref}
+
+${items}
+
+${order.hasIndicative ? 'Indicative total' : 'Total'}: ${formatINR(order.total)}
+
+Customer: ${c.name}
+Phone: ${c.phone}${c.email ? `\nEmail: ${c.email}` : ''}
+Ship to: ${c.address}, ${c.city} ${c.postcode}, ${c.country}`
+  return `mailto:?subject=${encodeURIComponent(`New Order — ${order.ref}`)}&body=${encodeURIComponent(body)}`
+}

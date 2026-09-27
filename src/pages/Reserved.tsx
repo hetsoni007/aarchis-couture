@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom'
 import { Seo } from '../lib/seo'
 import { getProduct } from '../lib/catalog'
 import { formatINR } from '../lib/format'
-import { waLink, studioOrderLink, customerOrderLink } from '../lib/whatsapp'
+import { waLink, studioOrderLink, customerOrderLink, customerEmailLink } from '../lib/whatsapp'
 import { useOrders } from '../store/orders'
 import { useUi } from '../store/ui'
 import { Button } from '../components/ui/Button'
@@ -37,21 +37,13 @@ export default function Reserved() {
           <span className="rsv-check" aria-hidden="true"><Icon name="check" size={28} /></span>
           <p className="t-label t-muted">Order <span className="t-num">{order.ref}</span></p>
           <h1 id="rsv-title" className="t-h1">Thank you, {firstName}! Your order has been placed.</h1>
-          <p className="t-lead">Order notifications have been sent on WhatsApp. If they didn't open automatically, you can send them manually below.</p>
+          <p className="t-lead">We've sent order notifications on WhatsApp.{order.contact.email && ' You can also send a confirmation to your email.'} If they didn't open automatically, use the buttons below.</p>
           <div className="rsv-cta">
             <Button href={studioOrderLink(order)} size="lg" icon="whatsapp">Send order to studio</Button>
-            <Button href={customerOrderLink(order)} variant="secondary" size="lg" icon="whatsapp">Send your confirmation</Button>
+            <Button href={customerOrderLink(order)} variant="secondary" size="lg" icon="whatsapp">Send your WhatsApp confirmation</Button>
+            {order.contact.email && <Button href={customerEmailLink(order)} variant="secondary" size="lg" icon="mail">Email your confirmation</Button>}
           </div>
-          <div className="rsv-next">
-            <h2 className="t-label">What happens next</h2>
-            <ol role="list" className="journey">
-              <li className="is-done"><span className="journey-dot" aria-hidden="true"><Icon name="check" size={12} /></span><span className="journey-t">Order placed</span><span className="journey-tag">Done</span></li>
-              <li className="is-next"><span className="journey-dot" aria-hidden="true" /><span className="journey-t">Order confirmed by studio</span><span className="journey-tag is-next">Next</span></li>
-              <li><span className="journey-dot" aria-hidden="true" /><span className="journey-t">Crafted in Ahmedabad</span></li>
-              <li><span className="journey-dot" aria-hidden="true" /><span className="journey-t">Shipped to you</span></li>
-              <li><span className="journey-dot" aria-hidden="true" /><span className="journey-t">Delivered to your door</span></li>
-            </ol>
-          </div>
+          <p className="t-muted t-small rsv-note">We'll confirm your order and get started on crafting your piece. For any questions, reach us on WhatsApp.</p>
           <Button to="/shop" variant="secondary">Continue shopping</Button>
         </section>
         <aside className="rsv-side" aria-label="Your order">

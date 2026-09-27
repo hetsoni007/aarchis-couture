@@ -112,7 +112,7 @@ export function Footer() {
               <li><Link to="/about">About Archana Soni</Link></li>
               <li><Link to="/navratri-outfits-ahmedabad">The Navratri edit</Link></li>
               <li><Link to="/account">My account</Link></li>
-              <li><Link to="/account">Track a reservation</Link></li>
+              <li><Link to="/account">Track an order</Link></li>
               <li><Link to="/wishlist">Wishlist</Link></li>
             </ul>
           </nav>
