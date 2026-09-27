@@ -10,8 +10,7 @@ import './layout.css'
 
 /** The four promises the studio's real process supports (How it works, live site). */
 export const SERVICES: { icon: IconName; title: string; text: string }[] = [
-  { icon: 'scissors', title: 'Made to measure', text: 'Cut to your measurements in the Ahmedabad studio.' },
-  { icon: 'video', title: 'Video consultation', text: 'Design, fabric and fitting guided over WhatsApp.' },
+  { icon: 'scissors', title: 'Made to measure', text: 'Handcrafted to order in the Ahmedabad studio.' },
   { icon: 'truck', title: 'Shipped worldwide', text: 'Across India, the USA, UK, Canada, Australia and UAE.' },
   { icon: 'shield', title: 'Secure ordering', text: 'Order confirmation sent on WhatsApp.' },
 ]

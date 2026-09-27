@@ -7,7 +7,6 @@ import { Price } from '../ui/Kit'
 import { categories, categoryUrl, getProduct, productUrl } from '../../lib/catalog'
 import { NAV_LABEL, HOUSE_LINKS, OCCASION_COVER, megaFor, occasionsWithCounts } from '../../lib/nav'
 import { cx } from '../../lib/format'
-import { askStylist } from '../../lib/whatsapp'
 import { useUi } from '../../store/ui'
 import { useBag, bagCount } from '../../store/bag'
 import { useWishlist } from '../../store/wishlist'
@@ -15,7 +14,6 @@ import './layout.css'
 
 const MESSAGES = [
   { text: 'Made to measure in Ahmedabad · Shipped worldwide' },
-  { text: 'Book a video consultation with Archana', href: askStylist('booking a video consultation') },
   { text: 'Order today — handcrafted and shipped worldwide', to: '/how-it-works' },
 ]
 
@@ -32,8 +30,7 @@ export function AnnouncementBar() {
     <div className="announce" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}>
       <button className="announce-nav" onClick={() => setI((i + MESSAGES.length - 1) % MESSAGES.length)} aria-label="Previous message"><Icon name="chevronL" size={14} /></button>
       <p className="announce-msg" key={i}>
-        {m.href ? <a href={m.href} target="_blank" rel="noopener noreferrer" className="link-u">{m.text}</a>
-          : m.to ? <Link to={m.to} className="link-u">{m.text}</Link> : m.text}
+        {m.to ? <Link to={m.to} className="link-u">{m.text}</Link> : m.text}
       </p>
       <button className="announce-nav" onClick={() => setI((i + 1) % MESSAGES.length)} aria-label="Next message"><Icon name="chevronR" size={14} /></button>
     </div>
@@ -112,9 +109,8 @@ function HouseMega() {
         <span className="t-h3">Archana Soni</span>
       </Link>
       <div className="mega-house-note">
-        <p className="t-label mega-h">Need a hand?</p>
-        <p className="t-muted">Every piece starts with a conversation — share your date, your ideas and your budget.</p>
-        <a href={askStylist()} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm"><Icon name="whatsapp" size={16} className="btn-ic" /><span className="btn-label">Chat with a stylist</span></a>
+        <p className="t-label mega-h">Shop with confidence</p>
+        <p className="t-muted">Every piece is handcrafted to order. Browse the collection and place your order online.</p>
       </div>
     </div>
   )
@@ -171,9 +167,6 @@ export function Header() {
         </div>
         <Link to="/" className="hdr-logo"><Logo /></Link>
         <div className="hdr-right">
-          <a href={askStylist('booking a consultation')} target="_blank" rel="noopener noreferrer" className="hdr-consult hidden xl:inline-flex">
-            <Icon name="whatsapp" size={15} /> Book a consultation
-          </a>
           <Link to="/account" className="hdr-ic hidden md:grid" aria-label="Account"><Icon name="user" /></Link>
           <Link to="/wishlist" className="hdr-ic hidden xs:grid" aria-label={`Wishlist, ${wish} saved`}>
             <Icon name="heart" />{wish > 0 && <span className="hdr-count t-num" aria-hidden="true">{wish}</span>}
